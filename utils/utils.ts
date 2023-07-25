@@ -1,7 +1,4 @@
-import { addExtra } from "playwright-extra";
 import Listing from "../types/Listing";
-import StealthPlugin from "puppeteer-extra-plugin-stealth";
-import playwright from "playwright";
 
 export const getListingScore = async (listing: Listing) => {
   const priceDifference =
