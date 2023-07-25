@@ -21,7 +21,7 @@ export default interface Listing {
   date_ingested: number | null;
 }
 
-export interface EntrichedListing extends Listing {
+export interface EnrichedListing extends Listing {
   skins: {
     name: string | null;
     weapon: string | null;
@@ -30,6 +30,6 @@ export interface EntrichedListing extends Listing {
   };
 }
 
-export interface ScoredListing extends EntrichedListing {
+export interface ScoredListing extends EnrichedListing {
   score: number;
 }
