@@ -6,9 +6,55 @@ import { ScoredListing } from "../types/Listing";
 import { getListingScore } from "../utils/utils";
 import ListingCard from "@/components/ListingCard";
 import "../styles/globals.scss";
+import Select from "react-select";
 
 export default function Home() {
   const [scoredListings, setScoredListings] = useState<ScoredListing[]>([]);
+
+  const [sort, setSort] = useState<
+    | "priceAsc"
+    | "priceDsc"
+    | "ratingAsc"
+    | "ratingDsc"
+    | "floatAsc"
+    | "floatDsc"
+  >("ratingDsc");
+
+  const sortOptions = [
+    { value: "priceAsc", label: "Price Ascending" },
+    { value: "priceDsc", label: "Price Decending" },
+    { value: "ratingAsc", label: "Rating Ascending" },
+    { value: "ratingDsc", label: "Rating Decending" },
+    { value: "floatAsc", label: "Float Ascending" },
+    { value: "floatDsc", label: "Float Decending" },
+  ];
+
+  const sortedListings = () => {
+    switch (sort) {
+      case "priceAsc":
+        return scoredListings.sort((a, b) =>
+          a.price && b.price && a.price > b.price ? 1 : -1
+        );
+      case "priceDsc":
+        return scoredListings.sort((a, b) =>
+          a.price && b.price && a.price > b.price ? -1 : 1
+        );
+      case "ratingAsc":
+        return scoredListings.sort((a, b) => (a.score > b.score ? 1 : -1));
+      case "ratingDsc":
+        return scoredListings.sort((a, b) => (a.score > b.score ? -1 : 1));
+      case "floatAsc":
+        return scoredListings.sort((a, b) =>
+          a.float && b.float && a.float > b.float ? 1 : -1
+        );
+      case "floatDsc":
+        return scoredListings.sort((a, b) =>
+          a.float && b.float && a.float > b.float ? -1 : 1
+        );
+      default:
+        return scoredListings.sort((a, b) => (a.score > b.score ? -1 : 1));
+    }
+  };
 
   useEffect(() => {
     fetch("/api/db/listings")
@@ -31,13 +77,104 @@ export default function Home() {
         <title>Skins</title>
       </Head>
       <main>
-        <div className={styles.itemsContainer}>
-          {scoredListings
-            .sort((a, b) => (a.score > b.score ? -1 : 1))
-            .slice(0, 150)
-            .map((listing) => (
-              <ListingCard listing={listing} key={listing.id} />
-            ))}
+        <div
+          style={{
+            maxWidth: "1534px",
+            marginLeft: "auto",
+            marginRight: "auto",
+          }}
+        >
+          <div
+            style={{
+              marginLeft: "0.7rem",
+              marginTop: "3rem",
+              display: "flex",
+              alignItems: "flex-end",
+            }}
+          >
+            <div
+              style={{
+                backgroundColor: "#3a3a59",
+                padding: "0.5rem",
+                borderRadius: "100px",
+                color: "white",
+              }}
+            >
+              <h2 style={{ paddingLeft: "0.7rem", paddingRight: "0.7rem" }}>
+                {scoredListings.length}
+              </h2>
+            </div>
+            <h1 style={{ marginLeft: "1rem" }}>Listings</h1>
+            <div style={{ flex: 1 }} />
+            <Select
+              styles={{
+                control: (baseStyles, state) => ({
+                  ...baseStyles,
+                  backgroundColor: "rgb(27 27 41)",
+                  color: "white",
+                  border: 0,
+                  minHeight: 0,
+                  boxShadow: "none",
+                }),
+                container: (baseStyles, state) => ({
+                  ...baseStyles,
+                  backgroundColor: "rgb(27 27 41)",
+                  color: "white",
+                  marginRight: "0.5rem",
+                  border: 0,
+                }),
+                valueContainer: (baseStyles, state) => ({
+                  ...baseStyles,
+                  paddingTop: 0,
+                  paddingBottom: 0,
+                }),
+                singleValue: (baseStyles, state) => ({
+                  ...baseStyles,
+                  color: "#696995",
+                }),
+                menu: (baseStyles, state) => ({
+                  ...baseStyles,
+                  backgroundColor: "rgb(27 27 41)",
+                  color: "white",
+                }),
+                indicatorSeparator: (baseStyles, state) => ({
+                  ...baseStyles,
+                  display: "none",
+                }),
+                indicatorsContainer: (baseStyles, state) => ({
+                  ...baseStyles,
+                  alignSelf: "center",
+                }),
+                option: (baseStyles, state) => ({
+                  ...baseStyles,
+                  backgroundColor: "rgb(27 27 41)",
+                  "&:hover": {
+                    backgroundColor: "#44446d",
+                  },
+                }),
+                dropdownIndicator: (baseStyles, state) => ({
+                  ...baseStyles,
+                  color: "#696995",
+                  paddingTop: 0,
+                  paddingBottom: 0,
+                }),
+              }}
+              options={sortOptions}
+              onChange={(e) => e && setSort(e.value as any)}
+              value={
+                sortOptions.find((option) => option.value === sort) ??
+                sortOptions[0]
+              }
+              placeholder="Select an option"
+            />
+          </div>
+          <div className={styles.itemsContainer}>
+            {sortedListings()
+              .slice(0, 150)
+              .map((listing) => (
+                <ListingCard listing={listing} key={listing.id} />
+              ))}
+          </div>
         </div>
       </main>
     </div>
