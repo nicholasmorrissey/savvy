@@ -100,19 +100,21 @@ export default function Home() {
               alignItems: "flex-end",
             }}
           >
-            <div
-              style={{
-                backgroundColor: "#3a3a59",
-                padding: "0.5rem",
-                borderRadius: "100px",
-                color: "white",
-              }}
-            >
-              <h2 style={{ paddingLeft: "0.7rem", paddingRight: "0.7rem" }}>
-                {scoredListings.length}
-              </h2>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <div
+                style={{
+                  backgroundColor: "#3a3a59",
+                  padding: "0.5rem",
+                  borderRadius: "100px",
+                  color: "white",
+                }}
+              >
+                <h2 style={{ paddingLeft: "0.7rem", paddingRight: "0.7rem" }}>
+                  {scoredListings.length}
+                </h2>
+              </div>
+              <h1 style={{ marginLeft: "1rem" }}>Listings</h1>
             </div>
-            <h1 style={{ marginLeft: "1rem" }}>Listings</h1>
             <div style={{ flex: 1 }} />
             <Select
               styles={{
