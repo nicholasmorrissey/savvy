@@ -7,6 +7,8 @@ import { getListingScore } from "../utils/utils";
 import ListingCard from "@/components/ListingCard";
 import "../styles/globals.scss";
 import Select from "react-select";
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 export default function Home() {
   const [scoredListings, setScoredListings] = useState<ScoredListing[]>([]);
@@ -179,11 +181,28 @@ export default function Home() {
             />
           </div>
           <div className={styles.itemsContainer}>
-            {sortedListings()
-              .slice(0, 150)
-              .map((listing) => (
-                <ListingCard listing={listing} key={listing.id} />
-              ))}
+            {scoredListings.length !== 0 ? (
+              sortedListings()
+                .slice(0, 150)
+                .map((listing) => (
+                  <ListingCard listing={listing} key={listing.id} />
+                ))
+            ) : (
+              <SkeletonTheme
+                baseColor="#26263d"
+                highlightColor="#2d2d47"
+                borderRadius="10px"
+                duration={2}
+              >
+                <Skeleton
+                  count={150}
+                  width="200px"
+                  height="300px"
+                  inline
+                  style={{ margin: "0.5rem" }}
+                />
+              </SkeletonTheme>
+            )}
           </div>
         </div>
       </main>

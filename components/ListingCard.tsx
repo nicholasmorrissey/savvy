@@ -275,7 +275,7 @@ const ListingCard: FC<ListingCardProps> = ({ listing }) => {
                     <p className={styles.float}>{listing.float?.toFixed(9)}</p>
                   </div>
                 </div>
-                <div data-tooltip-id="score" data-tooltip-html={scoreCard}>
+                <div>
                   <p
                     style={{
                       textAlign: "right",
@@ -289,6 +289,8 @@ const ListingCard: FC<ListingCardProps> = ({ listing }) => {
                     Rating
                   </p>
                   <div
+                    data-tooltip-id="score"
+                    data-tooltip-html={scoreCard}
                     style={{
                       fontSize: "1.4em",
                       fontWeight: "bold",
