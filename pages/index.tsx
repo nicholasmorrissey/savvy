@@ -6,61 +6,73 @@ import { ScoredListing } from "../types/Listing";
 import { getListingScore } from "../utils/utils";
 import ListingCard from "@/components/ListingCard";
 import "../styles/globals.scss";
-import Select from "react-select";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import SortSelect, { Sort } from "@/components/SortSelect";
 
 export default function Home() {
   const [scoredListings, setScoredListings] = useState<ScoredListing[]>([]);
 
-  const [sort, setSort] = useState<
-    | "priceAsc"
-    | "priceDsc"
-    | "ratingAsc"
-    | "ratingDsc"
-    | "floatAsc"
-    | "floatDsc"
-  >("ratingDsc");
-
-  const sortOptions = [
-    { value: "priceAsc", label: "Lowest Price" },
-    { value: "priceDsc", label: "Highest Price" },
-    { value: "ratingAsc", label: "Lowest Rating" },
-    { value: "ratingDsc", label: "Highest Rating" },
-    { value: "floatAsc", label: "Lowest Float" },
-    { value: "floatDsc", label: "Highest Float" },
-  ];
+  const [sort, setSort] = useState<Sort>(Sort.RatingDsc);
 
   const sortedListings = () => {
     switch (sort) {
-      case "priceAsc":
+      case Sort.PriceAsc:
         return scoredListings.sort((a, b) =>
           a.price && b.price && a.price > b.price ? 1 : -1
         );
-      case "priceDsc":
+      case Sort.PriceDsc:
         return scoredListings.sort((a, b) =>
           a.price && b.price && a.price > b.price ? -1 : 1
         );
-      case "ratingAsc":
+      case Sort.RatingAsc:
         return scoredListings.sort((a, b) =>
           a.score.total && b.score.total && a.score.total > b.score.total
             ? 1
             : -1
         );
-      case "ratingDsc":
+      case Sort.RatingDsc:
         return scoredListings.sort((a, b) =>
           a.score.total && b.score.total && a.score.total > b.score.total
             ? -1
             : 1
         );
-      case "floatAsc":
+      case Sort.FloatAsc:
         return scoredListings.sort((a, b) =>
           a.float && b.float && a.float > b.float ? 1 : -1
         );
-      case "floatDsc":
+      case Sort.FloatDsc:
         return scoredListings.sort((a, b) =>
           a.float && b.float && a.float > b.float ? -1 : 1
         );
+      case Sort.CollectionAsc:
+        return scoredListings.sort((a, b) => {
+          const collectionADate =
+            (a.skins.collections?.collection_date &&
+              Date.parse(a.skins.collections?.collection_date)) ??
+            0;
+
+          const collectionBDate =
+            (b.skins.collections?.collection_date &&
+              Date.parse(b.skins.collections?.collection_date)) ??
+            0;
+
+          return collectionADate > collectionBDate ? 1 : -1;
+        });
+      case Sort.CollectionDsc:
+        return scoredListings.sort((a, b) => {
+          const collectionADate =
+            (a.skins.collections?.collection_date &&
+              Date.parse(a.skins.collections?.collection_date)) ??
+            0;
+
+          const collectionBDate =
+            (b.skins.collections?.collection_date &&
+              Date.parse(b.skins.collections?.collection_date)) ??
+            0;
+
+          return collectionADate < collectionBDate ? -1 : 1;
+        });
       default:
         return scoredListings.sort((a, b) => (a.score > b.score ? -1 : 1));
     }
@@ -118,67 +130,7 @@ export default function Home() {
               <h1 style={{ marginLeft: "1rem" }}>Listings</h1>
             </div>
             <div style={{ flex: 1 }} />
-            <Select
-              styles={{
-                control: (baseStyles, state) => ({
-                  ...baseStyles,
-                  backgroundColor: "rgb(27 27 41)",
-                  color: "white",
-                  border: 0,
-                  minHeight: 0,
-                  boxShadow: "none",
-                }),
-                container: (baseStyles, state) => ({
-                  ...baseStyles,
-                  backgroundColor: "rgb(27 27 41)",
-                  color: "white",
-                  marginRight: "0.5rem",
-                  border: 0,
-                }),
-                valueContainer: (baseStyles, state) => ({
-                  ...baseStyles,
-                  paddingTop: 0,
-                  paddingBottom: 0,
-                }),
-                singleValue: (baseStyles, state) => ({
-                  ...baseStyles,
-                  color: "#696995",
-                }),
-                menu: (baseStyles, state) => ({
-                  ...baseStyles,
-                  backgroundColor: "rgb(27 27 41)",
-                  color: "white",
-                }),
-                indicatorSeparator: (baseStyles, state) => ({
-                  ...baseStyles,
-                  display: "none",
-                }),
-                indicatorsContainer: (baseStyles, state) => ({
-                  ...baseStyles,
-                  alignSelf: "center",
-                }),
-                option: (baseStyles, state) => ({
-                  ...baseStyles,
-                  backgroundColor: "rgb(27 27 41)",
-                  "&:hover": {
-                    backgroundColor: "#44446d",
-                  },
-                }),
-                dropdownIndicator: (baseStyles, state) => ({
-                  ...baseStyles,
-                  color: "#696995",
-                  paddingTop: 0,
-                  paddingBottom: 0,
-                }),
-              }}
-              options={sortOptions}
-              onChange={(e) => e && setSort(e.value as any)}
-              value={
-                sortOptions.find((option) => option.value === sort) ??
-                sortOptions[0]
-              }
-              placeholder="Select an option"
-            />
+            <SortSelect sort={sort} setSort={setSort} />
           </div>
           <div className={styles.itemsContainer}>
             {scoredListings.length !== 0 ? (

@@ -26,7 +26,12 @@ export interface EnrichedListing extends Listing {
     name: string | null;
     weapon: string | null;
     quality: string | null;
-    collections: { name: string | null };
+    collection_id: number | null;
+    collections: {
+      name: string | null;
+      collection_image: string | null;
+      collection_date: string | null;
+    } | null;
   };
 }
 
@@ -35,5 +40,7 @@ export interface ScoredListing extends EnrichedListing {
     total: number;
     priceDifference: number;
     floatRank: number;
+    collectionDate: number;
+    statTrak: number;
   };
 }

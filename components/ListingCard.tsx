@@ -8,6 +8,7 @@ import ReactDOMServer from "react-dom/server";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import FloatRank from "@/types/FloatRank";
+import Skin from "@/types/Skin";
 
 const exteriorAbbreviation = (exterior: string) => {
   switch (exterior) {
@@ -65,6 +66,8 @@ const rarityBorderClass = (rarity: string) => {
 
 const rarityColor = (rarity: string) => {
   switch (rarity) {
+    case "Contraband":
+      return "orange";
     case "Covert":
       return "rgb(255 0 0 / 58%)";
     case "Classified":
@@ -101,6 +104,7 @@ interface ListingCardProps {
 const ListingCard: FC<ListingCardProps> = ({ listing }) => {
   const [hovered, setHovered] = useState(false);
   const [floatRankings, setFloatRankings] = useState<FloatRank[]>([]);
+  const [collectionSkins, setCollectionSkins] = useState<Skin[]>([]);
 
   const rank = listing.float_rank ?? -1;
 
@@ -115,32 +119,79 @@ const ListingCard: FC<ListingCardProps> = ({ listing }) => {
       .then((res) => res.json())
       .then((data) => {
         setFloatRankings(data);
-        console.log(data);
+      });
+  };
+
+  const fetchCollection = async () => {
+    if (floatRankings?.length > 0) return;
+    await fetch("/api/db/collections", {
+      method: "POST",
+      body: JSON.stringify({
+        collection_id: listing.skins.collection_id,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setCollectionSkins(data);
       });
   };
 
   const scoreCard = ReactDOMServer.renderToStaticMarkup(
     <div style={{ width: "180px", padding: "0.5rem" }}>
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          marginBottom: "0.5rem",
-        }}
-      >
-        <p>Price difference</p>
-        <span style={{ flex: 1 }} />
-        <p style={{ color: "#2da156", fontWeight: "bold" }}>
-          {listing.score.priceDifference}
-        </p>
-      </div>
-      <div style={{ display: "flex", alignItems: "center" }}>
-        <p>Float ranking</p>
-        <span style={{ flex: 1 }} />
-        <p style={{ color: "#2da156", fontWeight: "bold" }}>
-          {listing.score.floatRank}
-        </p>
-      </div>
+      {listing.score.priceDifference !== 0 && (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            marginBottom: "0.5rem",
+          }}
+        >
+          <p>Price difference</p>
+          <span style={{ flex: 1 }} />
+          <p style={{ color: "#2da156", fontWeight: "bold" }}>
+            {Math.round(listing.score.priceDifference)}
+          </p>
+        </div>
+      )}
+      {listing.score.floatRank !== 0 && (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            marginBottom: "0.5rem",
+          }}
+        >
+          <p>Float ranking</p>
+          <span style={{ flex: 1 }} />
+          <p style={{ color: "#2da156", fontWeight: "bold" }}>
+            {Math.round(listing.score.floatRank)}
+          </p>
+        </div>
+      )}
+      {listing.score.collectionDate !== 0 && (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            marginBottom: "0.5rem",
+          }}
+        >
+          <p>Collection age</p>
+          <span style={{ flex: 1 }} />
+          <p style={{ color: "#2da156", fontWeight: "bold" }}>
+            {Math.round(listing.score.collectionDate)}
+          </p>
+        </div>
+      )}
+      {listing.score.statTrak !== 0 && (
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <p>StatTrak</p>
+          <span style={{ flex: 1 }} />
+          <p style={{ color: "#2da156", fontWeight: "bold" }}>
+            {Math.round(listing.score.statTrak)}
+          </p>
+        </div>
+      )}
     </div>
   );
 
@@ -167,6 +218,7 @@ const ListingCard: FC<ListingCardProps> = ({ listing }) => {
                 : 1;
             return (
               <div
+                key={ranking.csgofloat_id}
                 style={{
                   width: "100%",
                   display: "flex",
@@ -205,6 +257,105 @@ const ListingCard: FC<ListingCardProps> = ({ listing }) => {
     </div>
   );
 
+  const collection = ReactDOMServer.renderToStaticMarkup(
+    <div
+      style={{
+        width: "400px",
+        padding: "0.4rem",
+        paddingBottom: "1rem",
+      }}
+    >
+      <div
+        style={{
+          marginBottom: "0.5rem",
+          marginTop: "0.5rem",
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <p style={{ fontWeight: "bold" }}>{listing.skins.collections?.name}</p>
+        <div
+          style={{
+            backgroundColor: "rgb(51 51 77)",
+            padding: "0.2rem",
+            borderRadius: "100px",
+            color: "white",
+            marginLeft: "0.5rem",
+          }}
+        >
+          <p
+            style={{
+              paddingLeft: "0.4rem",
+              paddingRight: "0.4rem",
+              fontWeight: "bold",
+              fontSize: "1em",
+            }}
+          >
+            {collectionSkins.length}
+          </p>
+        </div>
+        <div style={{ flex: 1 }} />
+        <p style={{ color: "#8b8bdf", opacity: 0.8 }}>
+          {listing.skins.collections?.collection_date}
+        </p>
+      </div>
+      {collectionSkins.length > 0 ? (
+        collectionSkins.map((skin: Skin, index) => {
+          return (
+            <div
+              key={skin.skin_id}
+              style={{
+                width: "100%",
+                display: "flex",
+                alignItems: "center",
+                paddingTop: "0.4rem",
+              }}
+            >
+              <p
+                style={{ marginRight: "1rem", flexBasis: "25%", opacity: 0.4 }}
+              >
+                {skin.weapon}
+              </p>
+              <p
+                style={{
+                  color: skin.skin_id === listing.skin_id ? "#8b8bdf" : "white",
+                  fontWeight:
+                    skin.skin_id === listing.skin_id ? "bold" : "normal",
+                }}
+              >
+                {skin.name}
+              </p>
+              <span style={{ flex: 1 }} />
+              <p
+                style={{
+                  justifySelf: "flex-end",
+                  color: skin.quality ? rarityColor(skin.quality) : "white",
+                }}
+              >
+                {skin.quality}
+              </p>
+            </div>
+          );
+        })
+      ) : (
+        <SkeletonTheme
+          baseColor="#353535"
+          highlightColor="#494949"
+          borderRadius="10px"
+          duration={2}
+        >
+          <Skeleton
+            count={10}
+            width="220px"
+            height="10px"
+            inline
+            style={{ marginTop: "0.4rem" }}
+          />
+        </SkeletonTheme>
+      )}
+    </div>
+  );
+
   return (
     <div
       style={{
@@ -221,24 +372,35 @@ const ListingCard: FC<ListingCardProps> = ({ listing }) => {
       onMouseLeave={() => setHovered(false)}
     >
       {hovered && (
-        <Tooltip
-          id="score"
-          place="right"
-          style={{
-            zIndex: 100,
-          }}
-          opacity={1}
-        />
-      )}
-      {hovered && (
-        <Tooltip
-          id="ranking"
-          place="left"
-          style={{
-            zIndex: 100,
-          }}
-          opacity={1}
-        />
+        <>
+          <Tooltip
+            id="score"
+            place="right"
+            style={{
+              zIndex: 100,
+              backgroundColor: "#1a1a1a",
+            }}
+            opacity={1}
+          />
+          <Tooltip
+            id="ranking"
+            place="left"
+            style={{
+              zIndex: 100,
+              backgroundColor: "#1a1a1a",
+            }}
+            opacity={1}
+          />
+          <Tooltip
+            id="collection"
+            place="left"
+            style={{
+              zIndex: 100,
+              backgroundColor: "#1a1a1a",
+            }}
+            opacity={1}
+          />
+        </>
       )}
       <Tilt
         scale={1.05}
@@ -287,13 +449,18 @@ const ListingCard: FC<ListingCardProps> = ({ listing }) => {
                 </p>
               </div>
               <div style={{ display: "flex", alignItems: "flex-start" }}>
-                <p className={styles.collection}>
-                  {listing.skins.collections?.name
-                    ? listing.skins.collections.name?.replace("The", "")
-                    : ""}
-                </p>
+                <img
+                  data-tooltip-id="collection"
+                  data-tooltip-html={collection}
+                  src={listing.skins.collections?.collection_image ?? ""}
+                  style={{
+                    maxHeight: "55px",
+                    maxWidth: "55px",
+                    marginTop: "0.2rem",
+                  }}
+                  onMouseEnter={() => fetchCollection()}
+                />
                 <div style={{ flex: 1 }} />
-
                 <p className={styles.suggestedPrice}>
                   ${listing.market_price && listing.market_price / 100}
                 </p>
@@ -397,7 +564,7 @@ const ListingCard: FC<ListingCardProps> = ({ listing }) => {
                         : "white",
                     }}
                   >
-                    {listing.score.total}
+                    {Math.round(listing.score.total)}
                   </div>
                 </div>
               </div>

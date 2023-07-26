@@ -6,7 +6,9 @@ export async function getAllListings() {
 
   const { data, error } = await supabase
     .from("listings")
-    .select("*, skins(name, weapon, quality, collections(name))");
+    .select(
+      "*, skins(name, weapon, quality, collection_id, collections(name, collection_image, collection_date))"
+    );
 
   return data;
 }
@@ -19,6 +21,17 @@ export async function getSkinFloatRankings(skin_id: number) {
     .select()
     .eq("skin_id", skin_id)
     .order("float_value", { ascending: true });
+
+  return data;
+}
+
+export async function getSkinCollection(collection_id: number) {
+  const supabase = createServerComponentClient({ cookies });
+
+  const { data, error } = await supabase
+    .from("skins")
+    .select()
+    .eq("collection_id", collection_id);
 
   return data;
 }
