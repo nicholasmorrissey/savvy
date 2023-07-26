@@ -23,5 +23,9 @@ export const getListingScore = async (listing: Listing) => {
 
   const score = priceDifference * floatRankMultiplier;
 
-  return score;
+  return {
+    total: score,
+    priceDifference: priceDifference,
+    floatRank: priceDifference * floatRankMultiplier - priceDifference,
+  };
 };

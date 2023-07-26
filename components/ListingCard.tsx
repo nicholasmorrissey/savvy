@@ -1,8 +1,10 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import styles from "@/styles/listing_styles.module.scss";
 import clsx from "clsx";
 import Tilt from "react-parallax-tilt";
 import { ScoredListing } from "@/types/Listing";
+import { Tooltip } from "react-tooltip";
+import ReactDOMServer from "react-dom/server";
 
 const exteriorAbbreviation = (exterior: string) => {
   switch (exterior) {
@@ -94,6 +96,32 @@ interface ListingCardProps {
 }
 
 const ListingCard: FC<ListingCardProps> = ({ listing }) => {
+  const [hovered, setHovered] = useState(false);
+
+  const scoreCard = ReactDOMServer.renderToStaticMarkup(
+    <div style={{ width: "180px", padding: "0.5rem" }}>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          marginBottom: "0.5rem",
+        }}
+      >
+        <p>Price difference</p>
+        <span style={{ flex: 1 }} />
+        <p style={{ color: "#2da156", fontWeight: "bold" }}>
+          {listing.score.priceDifference}
+        </p>
+      </div>
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <p>Float ranking</p>
+        <span style={{ flex: 1 }} />
+        <p style={{ color: "#2da156", fontWeight: "bold" }}>
+          {listing.score.floatRank}
+        </p>
+      </div>
+    </div>
+  );
   return (
     <div
       style={{
@@ -106,7 +134,19 @@ const ListingCard: FC<ListingCardProps> = ({ listing }) => {
         maxHeight: "330px",
         borderRadius: "10px",
       }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
     >
+      {hovered && (
+        <Tooltip
+          id="score"
+          place="right"
+          style={{
+            zIndex: 100,
+          }}
+          opacity={1}
+        />
+      )}
       <Tilt
         scale={1.05}
         glareEnable={true}
@@ -235,7 +275,7 @@ const ListingCard: FC<ListingCardProps> = ({ listing }) => {
                     <p className={styles.float}>{listing.float?.toFixed(9)}</p>
                   </div>
                 </div>
-                <div>
+                <div data-tooltip-id="score" data-tooltip-html={scoreCard}>
                   <p
                     style={{
                       textAlign: "right",
@@ -255,11 +295,11 @@ const ListingCard: FC<ListingCardProps> = ({ listing }) => {
                       opacity: 0.75,
                       textShadow: "0px 0px 3px black",
                       color: listing.score
-                        ? scoreColor(listing.score)
+                        ? scoreColor(listing.score.total)
                         : "white",
                     }}
                   >
-                    {listing.score}
+                    {listing.score.total}
                   </div>
                 </div>
               </div>

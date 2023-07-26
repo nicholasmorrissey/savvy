@@ -31,5 +31,9 @@ export interface EnrichedListing extends Listing {
 }
 
 export interface ScoredListing extends EnrichedListing {
-  score: number;
+  score: {
+    total: number;
+    priceDifference: number;
+    floatRank: number;
+  };
 }

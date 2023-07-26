@@ -21,12 +21,12 @@ export default function Home() {
   >("ratingDsc");
 
   const sortOptions = [
-    { value: "priceAsc", label: "Price Ascending" },
-    { value: "priceDsc", label: "Price Decending" },
-    { value: "ratingAsc", label: "Rating Ascending" },
-    { value: "ratingDsc", label: "Rating Decending" },
-    { value: "floatAsc", label: "Float Ascending" },
-    { value: "floatDsc", label: "Float Decending" },
+    { value: "priceAsc", label: "Lowest Price" },
+    { value: "priceDsc", label: "Highest Price" },
+    { value: "ratingAsc", label: "Lowest Rating" },
+    { value: "ratingDsc", label: "Highest Rating" },
+    { value: "floatAsc", label: "Lowest Float" },
+    { value: "floatDsc", label: "Highest Float" },
   ];
 
   const sortedListings = () => {
@@ -40,9 +40,17 @@ export default function Home() {
           a.price && b.price && a.price > b.price ? -1 : 1
         );
       case "ratingAsc":
-        return scoredListings.sort((a, b) => (a.score > b.score ? 1 : -1));
+        return scoredListings.sort((a, b) =>
+          a.score.total && b.score.total && a.score.total > b.score.total
+            ? 1
+            : -1
+        );
       case "ratingDsc":
-        return scoredListings.sort((a, b) => (a.score > b.score ? -1 : 1));
+        return scoredListings.sort((a, b) =>
+          a.score.total && b.score.total && a.score.total > b.score.total
+            ? -1
+            : 1
+        );
       case "floatAsc":
         return scoredListings.sort((a, b) =>
           a.float && b.float && a.float > b.float ? 1 : -1
