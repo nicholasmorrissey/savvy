@@ -68,7 +68,7 @@ const rarityColor = (rarity: string) => {
       return "rgb(255 67 242 / 58%)";
     case "Restricted":
       return "rgb(157 0 255 / 42%)";
-    case "Mil-Spec Grade":
+    case "Mil-Spec":
       return "rgb(0 20 255 / 56%)";
     case "Industrial Grade":
       return "rgb(33 132 255 / 57%)";
