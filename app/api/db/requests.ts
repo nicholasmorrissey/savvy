@@ -10,3 +10,15 @@ export async function getAllListings() {
 
   return data;
 }
+
+export async function getSkinFloatRankings(skin_id: number) {
+  const supabase = createServerComponentClient({ cookies });
+
+  const { data, error } = await supabase
+    .from("floats")
+    .select()
+    .eq("skin_id", skin_id)
+    .order("float_value", { ascending: true });
+
+  return data;
+}

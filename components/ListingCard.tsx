@@ -1,10 +1,13 @@
-import React, { FC, useState } from "react";
+import React, { FC, use, useState } from "react";
 import styles from "@/styles/listing_styles.module.scss";
 import clsx from "clsx";
 import Tilt from "react-parallax-tilt";
 import { ScoredListing } from "@/types/Listing";
 import { Tooltip } from "react-tooltip";
 import ReactDOMServer from "react-dom/server";
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
+import FloatRank from "@/types/FloatRank";
 
 const exteriorAbbreviation = (exterior: string) => {
   switch (exterior) {
@@ -97,6 +100,24 @@ interface ListingCardProps {
 
 const ListingCard: FC<ListingCardProps> = ({ listing }) => {
   const [hovered, setHovered] = useState(false);
+  const [floatRankings, setFloatRankings] = useState<FloatRank[]>([]);
+
+  const rank = listing.float_rank ?? -1;
+
+  const fetchRankings = async () => {
+    if (floatRankings?.length > 0) return;
+    await fetch("/api/db/floats", {
+      method: "POST",
+      body: JSON.stringify({
+        skin_id: listing.skin_id,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setFloatRankings(data);
+        console.log(data);
+      });
+  };
 
   const scoreCard = ReactDOMServer.renderToStaticMarkup(
     <div style={{ width: "180px", padding: "0.5rem" }}>
@@ -122,6 +143,68 @@ const ListingCard: FC<ListingCardProps> = ({ listing }) => {
       </div>
     </div>
   );
+
+  const rankings = ReactDOMServer.renderToStaticMarkup(
+    <div
+      style={{
+        width: "240px",
+        padding: "0.5rem",
+        paddingTop: 0,
+      }}
+    >
+      {floatRankings.length > 0 ? (
+        floatRankings
+          .map((ranking: FloatRank, index) => {
+            const opacity =
+              index === rank - 2 || index === listing.float_rank
+                ? 0.8
+                : index === rank - 3 || index === rank + 1
+                ? 0.6
+                : index === rank - 4 || index === rank + 2
+                ? 0.4
+                : index === rank - 5 || index === rank + 3
+                ? 0.2
+                : 1;
+            return (
+              <div
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  paddingTop: "0.4rem",
+                  color: index === rank - 1 ? "#8b8bdf" : "white",
+                  fontWeight: index === rank - 1 ? "bold" : "normal",
+                  opacity: opacity,
+                }}
+              >
+                <p style={{ marginRight: "1rem" }}>#{index + 1}</p>
+                <span style={{ flex: 1 }} />
+                <p style={{ justifySelf: "flex-end" }}>
+                  {ranking?.float_value?.toFixed(20)}
+                </p>
+              </div>
+            );
+          })
+          .slice(rank - 5 <= 0 ? 0 : rank - 5, rank + 4 >= 200 ? 200 : rank + 4)
+      ) : (
+        <SkeletonTheme
+          baseColor="#353535"
+          highlightColor="#494949"
+          borderRadius="10px"
+          duration={2}
+        >
+          <Skeleton
+            count={10}
+            width="220px"
+            height="10px"
+            inline
+            style={{ marginTop: "0.4rem" }}
+          />
+        </SkeletonTheme>
+      )}
+    </div>
+  );
+
   return (
     <div
       style={{
@@ -141,6 +224,16 @@ const ListingCard: FC<ListingCardProps> = ({ listing }) => {
         <Tooltip
           id="score"
           place="right"
+          style={{
+            zIndex: 100,
+          }}
+          opacity={1}
+        />
+      )}
+      {hovered && (
+        <Tooltip
+          id="ranking"
+          place="left"
           style={{
             zIndex: 100,
           }}
@@ -233,6 +326,9 @@ const ListingCard: FC<ListingCardProps> = ({ listing }) => {
                   <div className={styles.wearContainer}>
                     {listing.float_rank && listing.float_rank > 0 ? (
                       <div
+                        data-tooltip-id="ranking"
+                        data-tooltip-html={rankings}
+                        onMouseEnter={() => fetchRankings()}
                         style={{
                           opacity: 0.9,
                           marginRight: "0.5rem",
