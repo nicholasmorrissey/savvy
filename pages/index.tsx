@@ -57,7 +57,7 @@ export default function Home() {
               Date.parse(b.skins.collections?.collection_date)) ??
             0;
 
-          return collectionADate > collectionBDate ? 1 : -1;
+          return collectionADate > collectionBDate ? -1 : 1;
         });
       case Sort.CollectionDsc:
         return scoredListings.sort((a, b) => {
@@ -71,7 +71,7 @@ export default function Home() {
               Date.parse(b.skins.collections?.collection_date)) ??
             0;
 
-          return collectionADate < collectionBDate ? -1 : 1;
+          return collectionADate > collectionBDate ? 1 : -1;
         });
       default:
         return scoredListings.sort((a, b) => (a.score > b.score ? -1 : 1));
