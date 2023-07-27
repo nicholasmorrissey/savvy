@@ -326,14 +326,29 @@ const ListingCard: FC<ListingCardProps> = ({ listing }) => {
                 {skin.name}
               </p>
               <span style={{ flex: 1 }} />
+
               <p
                 style={{
                   justifySelf: "flex-end",
-                  color: skin.quality ? rarityColor(skin.quality) : "white",
+                  color: "white",
+                  opacity: 0.4,
+                  paddingLeft: "0.4rem",
+                  paddingRight: "0.4rem",
                 }}
               >
                 {skin.quality}
               </p>
+              <div
+                style={{
+                  width: "8px",
+                  height: "8px",
+                  backgroundColor: skin.quality
+                    ? rarityColor(skin.quality)
+                    : "black",
+                  borderRadius: "100px",
+                  marginLeft: "0.5rem",
+                }}
+              />
             </div>
           );
         })
@@ -346,7 +361,7 @@ const ListingCard: FC<ListingCardProps> = ({ listing }) => {
         >
           <Skeleton
             count={10}
-            width="220px"
+            width="380px"
             height="10px"
             inline
             style={{ marginTop: "0.4rem" }}
