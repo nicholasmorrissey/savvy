@@ -8,7 +8,8 @@ export async function getAllListings() {
     .from("listings")
     .select(
       "*, skins(name, weapon, quality, collection_id, collections(name, collection_image, collection_date))"
-    );
+    )
+    .is("archived_date", null);
 
   return data;
 }
