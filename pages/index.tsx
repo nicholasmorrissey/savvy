@@ -9,6 +9,10 @@ import "../styles/globals.scss";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import SortSelect, { Sort } from "@/components/SortSelect";
+import Scrollbars from "react-custom-scrollbars-2";
+import TextInput from "@/components/TextInput";
+import Logo from "/Savvy.png";
+import Image from "next/image";
 
 export default function Home() {
   const [scoredListings, setScoredListings] = useState<ScoredListing[]>([]);
@@ -96,65 +100,359 @@ export default function Home() {
   return (
     <div>
       <Head>
-        <title>Skins</title>
+        <title>Savvy</title>
       </Head>
-      <main>
+      <main style={{ height: "100vh" }}>
         <div
-          style={{
-            maxWidth: "1534px",
-            marginLeft: "auto",
-            marginRight: "auto",
-          }}
+          style={{ height: "100%", display: "flex", flexDirection: "column" }}
         >
           <div
             style={{
-              marginLeft: "0.7rem",
-              marginTop: "3rem",
+              height: "60px",
+              backgroundColor: "#161623",
               display: "flex",
-              alignItems: "flex-end",
+              paddingLeft: "2rem",
+              paddingRight: "2rem",
             }}
           >
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <div
+            <div
+              style={{
+                width: "350px",
+                display: "flex",
+                alignItems: "center",
+                marginLeft: "auto",
+                marginRight: "2.5rem",
+                justifyContent: "center",
+              }}
+            >
+              <img
+                src="/savvy.png"
                 style={{
-                  backgroundColor: "#3a3a59",
-                  padding: "0.5rem",
-                  borderRadius: "100px",
-                  color: "white",
+                  height: "4rem",
+                  marginLeft: "1.5rem",
+                  position: "relative",
+                  bottom: "-16px",
+                }}
+              />
+            </div>
+            <div
+              style={{
+                width: "1560px",
+                display: "flex",
+                alignItems: "center",
+                marginRight: "auto",
+              }}
+            >
+              <p
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  paddingLeft: "2rem",
+                  paddingRight: "2rem",
+                  borderBottom: "4px solid #6a6a93",
+                  height: "100%",
                 }}
               >
-                <h2 style={{ paddingLeft: "0.7rem", paddingRight: "0.7rem" }}>
-                  {scoredListings.length}
-                </h2>
-              </div>
-              <h1 style={{ marginLeft: "1rem" }}>Listings</h1>
+                Market
+              </p>
             </div>
-            <div style={{ flex: 1 }} />
-            <SortSelect sort={sort} setSort={setSort} />
           </div>
-          <div className={styles.itemsContainer}>
-            {scoredListings.length !== 0 ? (
-              sortedListings()
-                .slice(0, 150)
-                .map((listing) => (
-                  <ListingCard listing={listing} key={listing.id} />
-                ))
-            ) : (
-              <SkeletonTheme
-                baseColor="#26263d"
-                highlightColor="#2d2d47"
-                borderRadius="10px"
-                duration={2}
+          <div
+            style={{
+              flex: 1,
+              display: "flex",
+              overflow: "hidden",
+              paddingLeft: "2rem",
+              paddingRight: "2rem",
+            }}
+          >
+            <div
+              style={{
+                width: "350px",
+                display: "flex",
+                marginLeft: "auto",
+                marginTop: "2rem",
+                marginRight: "1rem",
+                marginBottom: "2rem",
+                borderRadius: "20px",
+                border: "2px solid rgb(43 43 65)",
+                backgroundColor: "#161623",
+                padding: "2rem",
+                flexDirection: "column",
+              }}
+            >
+              <h3
+                style={{
+                  fontWeight: "normal",
+                  marginTop: 0,
+                  marginBottom: "1rem",
+                  color: "#6a6a93",
+                }}
               >
-                <Skeleton
-                  count={150}
-                  width="200px"
-                  height="300px"
-                  inline
-                  style={{ margin: "0.5rem" }}
+                Rating Focus
+              </h3>
+              <div
+                style={{
+                  borderTop: "1px solid #6a6a93",
+                  marginBottom: "1.5rem",
+                  opacity: 0.2,
+                }}
+              />
+              <ul>
+                <li
+                  style={{
+                    marginBottom: "1rem",
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
+                  <div
+                    style={{
+                      borderRadius: "20px",
+                      padding: "5px",
+                      border: "1px solid rgb(84 84 117)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: "8px",
+                        height: "8px",
+                        borderRadius: "10px",
+                        backgroundColor: "rgb(106, 106, 147)",
+                      }}
+                    />
+                  </div>
+                  <span style={{ color: "#6a6a93", paddingLeft: "1rem" }}>
+                    Top floats
+                  </span>
+                </li>
+                <li
+                  style={{
+                    marginBottom: "1rem",
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
+                  <div
+                    style={{
+                      borderRadius: "20px",
+                      padding: "5px",
+                      border: "1px solid rgb(84 84 117)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: "8px",
+                        height: "8px",
+                        borderRadius: "10px",
+                        backgroundColor: "inherit",
+                      }}
+                    />
+                  </div>
+                  <span style={{ color: "#6a6a93", paddingLeft: "1rem" }}>
+                    Trade ups
+                  </span>
+                </li>
+              </ul>
+              <h3
+                style={{
+                  fontWeight: "normal",
+                  marginTop: "1rem",
+                  marginBottom: "1rem",
+                  color: "#6a6a93",
+                }}
+              >
+                Filters
+              </h3>
+              <div
+                style={{
+                  borderTop: "1px solid #6a6a93",
+                  marginBottom: "1.5rem",
+                  opacity: 0.2,
+                }}
+              />
+              <p
+                style={{
+                  color: "#6a6a93",
+                  fontSize: "1em",
+                  marginBottom: "1rem",
+                }}
+              >
+                Price
+              </p>
+              <div
+                style={{ display: "flex", alignItems: "center", width: "100%" }}
+              >
+                <TextInput
+                  type="text"
+                  placeholder="Min"
+                  spanProps={{ style: { marginRight: "1rem" } }}
+                  symbol="$"
                 />
-              </SkeletonTheme>
-            )}
+                <TextInput type="text" placeholder="Max" symbol="$" />
+              </div>
+              <p
+                style={{
+                  color: "#6a6a93",
+                  fontSize: "1em",
+                  marginBottom: "1rem",
+                  marginTop: "1rem",
+                }}
+              >
+                Float
+              </p>
+
+              <div style={{ display: "flex", flexDirection: "column" }}>
+                <div
+                  className={styles.floatBar}
+                  style={{ marginBottom: "1rem", height: "0.7rem" }}
+                >
+                  <div className={styles.factoryNew} />
+                  <div className={styles.minimalWear} />
+                  <div className={styles.fieldTested} />
+                  <div className={styles.wellWorn} />
+                  <div className={styles.battleScarred} />
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    width: "100%",
+                    marginTop: "0.5rem",
+                  }}
+                >
+                  <TextInput
+                    type="text"
+                    placeholder="Min"
+                    spanProps={{ style: { marginRight: "1rem" } }}
+                  />
+                  <TextInput type="text" placeholder="Max" />
+                </div>
+              </div>
+            </div>
+            <div
+              style={{
+                maxWidth: "1560px",
+                marginRight: "auto",
+                marginBottom: "2rem",
+                display: "flex",
+                flexDirection: "column",
+                flex: 1,
+                overflow: "hidden",
+              }}
+            >
+              <div
+                style={{
+                  marginLeft: "0.7rem",
+                  marginTop: "2rem",
+                  display: "flex",
+                  alignItems: "flex-end",
+                }}
+              >
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <div
+                    style={{
+                      backgroundColor: "#3a3a59",
+                      padding: "0.5rem",
+                      borderRadius: "100px",
+                      color: "white",
+                    }}
+                  >
+                    <h3
+                      style={{
+                        paddingLeft: "0.6rem",
+                        paddingRight: "0.6rem",
+                        margin: "0",
+                      }}
+                    >
+                      {scoredListings.length}
+                    </h3>
+                  </div>
+                  <h2 style={{ marginLeft: "1rem" }}>Listings</h2>
+                </div>
+                <div style={{ flex: 1 }} />
+                <SortSelect sort={sort} setSort={setSort} />
+              </div>
+              <div className={styles.itemsContainer}>
+                <Scrollbars
+                  renderView={(props) => (
+                    <div
+                      {...props}
+                      style={{
+                        ...props.style,
+                        display: "block",
+                        overflow: "scroll",
+                        marginBottom: "-17px",
+                        marginRight: "-17px",
+                      }}
+                    />
+                  )}
+                  renderTrackVertical={(props) => (
+                    <div
+                      {...props}
+                      style={{
+                        position: "absolute",
+                        top: "2px",
+                        bottom: "2px",
+                        right: "2px",
+                        width: "5px",
+                        borderRadius: "3px",
+                      }}
+                    />
+                  )}
+                  renderThumbVertical={(props) => (
+                    <div
+                      {...props}
+                      style={{
+                        position: "relative",
+                        display: "block",
+                        width: "100%",
+                        cursor: "pointer",
+                        backgroundColor: "#6a6a93",
+                        borderRadius: "10px",
+                        opacity: 0.4,
+                      }}
+                    />
+                  )}
+                >
+                  {scoredListings.length !== 0 ? (
+                    <div
+                      style={{
+                        display: "flex",
+                        flexWrap: "wrap",
+                      }}
+                    >
+                      {sortedListings()
+                        .slice(0, 150)
+                        .map((listing) => (
+                          <ListingCard listing={listing} key={listing.id} />
+                        ))}
+                    </div>
+                  ) : (
+                    <SkeletonTheme
+                      baseColor="#26263d"
+                      highlightColor="#2d2d47"
+                      borderRadius="10px"
+                      duration={2}
+                    >
+                      <Skeleton
+                        count={150}
+                        width="200px"
+                        height="300px"
+                        inline
+                        style={{ margin: "0.5rem" }}
+                      />
+                    </SkeletonTheme>
+                  )}
+                </Scrollbars>
+              </div>
+            </div>
           </div>
         </div>
       </main>

@@ -260,17 +260,17 @@ const ListingCard: FC<ListingCardProps> = ({ listing }) => {
   const collection = ReactDOMServer.renderToStaticMarkup(
     <div
       style={{
-        width: "400px",
-        padding: "0.4rem",
+        width: "500px",
         paddingBottom: "1rem",
       }}
     >
       <div
         style={{
-          marginBottom: "0.5rem",
+          marginBottom: "1rem",
           marginTop: "0.5rem",
           display: "flex",
           alignItems: "center",
+          paddingLeft: "0.6rem",
         }}
       >
         <p style={{ fontWeight: "bold" }}>{listing.skins.collections?.name}</p>
@@ -308,7 +308,11 @@ const ListingCard: FC<ListingCardProps> = ({ listing }) => {
                 width: "100%",
                 display: "flex",
                 alignItems: "center",
-                paddingTop: "0.4rem",
+                padding: "0.2rem",
+                paddingBottom: "0.2rem",
+                paddingLeft: "0.6rem",
+                paddingRight: "0.6rem",
+                backgroundColor: index % 2 === 0 ? "#212121" : "inherit",
               }}
             >
               <p
@@ -361,7 +365,7 @@ const ListingCard: FC<ListingCardProps> = ({ listing }) => {
         >
           <Skeleton
             count={10}
-            width="380px"
+            width="390px"
             height="10px"
             inline
             style={{ marginTop: "0.4rem" }}

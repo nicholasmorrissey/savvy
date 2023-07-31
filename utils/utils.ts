@@ -26,28 +26,28 @@ export const getListingScore = async (listing: EnrichedListing) => {
   let collectionDateMultiplier = 1;
   switch (year) {
     case "2013":
-      collectionDateMultiplier = 3;
-      break;
-    case "2014":
-      collectionDateMultiplier = 2.5;
-      break;
-    case "2015":
       collectionDateMultiplier = 2;
       break;
-    case "2016":
+    case "2014":
       collectionDateMultiplier = 1.8;
       break;
+    case "2015":
+      collectionDateMultiplier = 1.6;
+      break;
+    case "2016":
+      collectionDateMultiplier = 1.4;
+      break;
     case "2017":
-      collectionDateMultiplier = 1.5;
-      break;
-    case "2018":
-      collectionDateMultiplier = 1.3;
-      break;
-    case "2019":
       collectionDateMultiplier = 1.2;
       break;
-    case "2020":
+    case "2018":
       collectionDateMultiplier = 1.1;
+      break;
+    case "2019":
+      collectionDateMultiplier = 1;
+      break;
+    case "2020":
+      collectionDateMultiplier = 1;
       break;
     case "2021":
       collectionDateMultiplier = 1;
@@ -56,7 +56,7 @@ export const getListingScore = async (listing: EnrichedListing) => {
       collectionDateMultiplier = 1;
   }
 
-  const statTrakMultiplier = listing.stat_trak ? 2 : 1;
+  const statTrakMultiplier = listing.stat_trak ? 1.2 : 1;
 
   const score =
     priceDifference *
