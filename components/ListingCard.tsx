@@ -365,7 +365,7 @@ const ListingCard: FC<ListingCardProps> = ({ listing }) => {
         >
           <Skeleton
             count={10}
-            width="390px"
+            width="100%"
             height="10px"
             inline
             style={{ marginTop: "0.4rem" }}

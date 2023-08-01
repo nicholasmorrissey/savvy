@@ -1,18 +1,21 @@
 import Head from "next/head";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "../styles/listing_styles.module.scss";
 import React from "react";
 import { ScoredListing } from "../types/Listing";
 import { getListingScore } from "../utils/utils";
 import ListingCard from "@/components/ListingCard";
 import "../styles/globals.scss";
+import "../styles/waves.scss";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import SortSelect, { Sort } from "@/components/SortSelect";
 import Scrollbars from "react-custom-scrollbars-2";
 import TextInput from "@/components/TextInput";
+import wave from "../public/wave.png";
 import Logo from "/Savvy.png";
 import Image from "next/image";
+import { useResizeDetector } from "react-resize-detector";
 
 export default function Home() {
   const [scoredListings, setScoredListings] = useState<ScoredListing[]>([]);
@@ -97,19 +100,52 @@ export default function Home() {
       });
   }, []);
 
+  const { width, ref } = useResizeDetector();
+
+  const smallRes = width && width < 2000;
+
+  console.log(smallRes);
+
+  // console.log(smallRes);
+
   return (
     <div>
       <Head>
         <title>Savvy</title>
+        <link rel="icon" type="image/x-icon" href="savvy_favi.png"></link>
       </Head>
-      <main style={{ height: "100vh" }}>
+      <main
+        style={{
+          height: "100vh",
+          position: "absolute",
+          left: 0,
+          right: 0,
+          overflow: "hidden",
+        }}
+        ref={ref}
+      >
+        <div className="ocean">
+          <div
+            className="wave"
+            style={{ background: "url('wave.png') repeat-x" }}
+          ></div>
+          <div
+            className="wave wave2"
+            style={{ background: "url('wave.png') repeat-x", opacity: 0.8 }}
+          ></div>
+        </div>
         <div
-          style={{ height: "100%", display: "flex", flexDirection: "column" }}
+          style={{
+            height: "100%",
+            display: "flex",
+            flexDirection: "column",
+            position: "relative",
+            zIndex: 100,
+          }}
         >
           <div
             style={{
               height: "60px",
-              backgroundColor: "#161623",
               display: "flex",
               paddingLeft: "2rem",
               paddingRight: "2rem",
@@ -129,7 +165,7 @@ export default function Home() {
                 src="/savvy.png"
                 style={{
                   height: "4rem",
-                  marginLeft: "1.5rem",
+                  marginLeft: "1rem",
                   position: "relative",
                   bottom: "-16px",
                 }}
@@ -137,7 +173,7 @@ export default function Home() {
             </div>
             <div
               style={{
-                width: "1560px",
+                width: smallRes ? "1280px" : "1560px",
                 display: "flex",
                 alignItems: "center",
                 marginRight: "auto",
@@ -157,6 +193,7 @@ export default function Home() {
               </p>
             </div>
           </div>
+
           <div
             style={{
               flex: 1,
@@ -338,7 +375,7 @@ export default function Home() {
             </div>
             <div
               style={{
-                maxWidth: "1560px",
+                maxWidth: smallRes ? "1280px" : "1560px",
                 marginRight: "auto",
                 marginBottom: "2rem",
                 display: "flex",
@@ -356,24 +393,35 @@ export default function Home() {
                 }}
               >
                 <div style={{ display: "flex", alignItems: "center" }}>
-                  <div
-                    style={{
-                      backgroundColor: "#3a3a59",
-                      padding: "0.5rem",
-                      borderRadius: "100px",
-                      color: "white",
-                    }}
-                  >
-                    <h3
+                  {scoredListings.length > 0 ? (
+                    <div
                       style={{
-                        paddingLeft: "0.6rem",
-                        paddingRight: "0.6rem",
-                        margin: "0",
+                        backgroundColor: "#3a3a59",
+                        padding: "0.5rem",
+                        borderRadius: "100px",
+                        color: "white",
                       }}
                     >
-                      {scoredListings.length}
-                    </h3>
-                  </div>
+                      <h3
+                        style={{
+                          paddingLeft: "0.6rem",
+                          paddingRight: "0.6rem",
+                          margin: "0",
+                        }}
+                      >
+                        {scoredListings.length}
+                      </h3>
+                    </div>
+                  ) : (
+                    <SkeletonTheme
+                      baseColor="#26263d"
+                      highlightColor="#2d2d47"
+                      borderRadius="30px"
+                      duration={2}
+                    >
+                      <Skeleton width="80px" height="37px" inline />
+                    </SkeletonTheme>
+                  )}
                   <h2 style={{ marginLeft: "1rem" }}>Listings</h2>
                 </div>
                 <div style={{ flex: 1 }} />
@@ -429,7 +477,7 @@ export default function Home() {
                       }}
                     >
                       {sortedListings()
-                        .slice(0, 150)
+                        .slice(0, 84)
                         .map((listing) => (
                           <ListingCard listing={listing} key={listing.id} />
                         ))}

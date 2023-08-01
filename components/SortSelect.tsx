@@ -37,7 +37,7 @@ const SortSelect: FC<SortSelectProps> = ({ sort, setSort }) => {
       styles={{
         control: (baseStyles, state) => ({
           ...baseStyles,
-          backgroundColor: "rgb(27 27 41)",
+          backgroundColor: "inherit",
           color: "white",
           border: 0,
           minHeight: 0,
@@ -45,7 +45,7 @@ const SortSelect: FC<SortSelectProps> = ({ sort, setSort }) => {
         }),
         container: (baseStyles, state) => ({
           ...baseStyles,
-          backgroundColor: "rgb(27 27 41)",
+          backgroundColor: "inherit",
           color: "white",
           marginRight: "0.5rem",
           border: 0,
