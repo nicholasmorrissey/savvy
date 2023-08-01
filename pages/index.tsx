@@ -145,7 +145,7 @@ export default function Home() {
         >
           <div
             style={{
-              height: "60px",
+              height: "75px",
               display: "flex",
               paddingLeft: "2rem",
               paddingRight: "2rem",
@@ -175,7 +175,7 @@ export default function Home() {
               style={{
                 width: smallRes ? "1280px" : "1560px",
                 display: "flex",
-                alignItems: "center",
+                alignItems: "flex-end",
                 marginRight: "auto",
               }}
             >
@@ -186,7 +186,7 @@ export default function Home() {
                   paddingLeft: "2rem",
                   paddingRight: "2rem",
                   borderBottom: "4px solid #6a6a93",
-                  height: "100%",
+                  height: "60px",
                 }}
               >
                 Market

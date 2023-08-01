@@ -27,7 +27,7 @@ const SortSelect: FC<SortSelectProps> = ({ sort, setSort }) => {
     { value: Sort.RatingAsc, label: "Lowest Rating" },
     { value: Sort.RatingDsc, label: "Highest Rating" },
     { value: Sort.FloatAsc, label: "Lowest Float" },
-    { value: Sort.RatingDsc, label: "Highest Float" },
+    { value: Sort.FloatDsc, label: "Highest Float" },
     { value: Sort.CollectionAsc, label: "Newest Collection" },
     { value: Sort.CollectionDsc, label: "Oldest Collection" },
   ];
