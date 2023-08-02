@@ -218,7 +218,10 @@ const MarketListings: FC<MarketListingsProps> = ({ smallRes }) => {
                 width="200px"
                 height="300px"
                 inline
-                style={{ margin: "0.5rem" }}
+                style={{
+                  margin: "0.5rem",
+                  boxShadow: "0 0 10px rgba(0, 0, 0, 0.3)",
+                }}
               />
             </SkeletonTheme>
           )}
