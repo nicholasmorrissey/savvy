@@ -1,0 +1,79 @@
+.floatThumb {
+  cursor: grabbing;
+}
+
+.floatTrack {
+  height: 0.7rem;
+}
+
+.floatTrack.floatTrack-0 {
+  background-color: black;
+  border-radius: 20px 0px 0px 20px;
+  opacity: 0.7;
+}
+.floatTrack.floatTrack-2 {
+  background-color: black;
+  border-radius: 0 20px 20px 0;
+  opacity: 0.7;
+}
+
+.floatBarContainer {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 0.5rem;
+}
+.floatBar {
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  align-items: center;
+  height: 0.5rem;
+  border-radius: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+.floatMarker {
+  height: 8px;
+  width: 12px;
+  position: relative;
+  left: -6px;
+  top: -6px;
+  background-image: linear-gradient(to top right, transparent 50%, white 0),
+    linear-gradient(to bottom right, white 50%, transparent 0);
+  background-size: 50% 100%;
+  background-repeat: no-repeat;
+  background-position: left, right;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.factoryNew {
+  width: 7%;
+  height: 100%;
+  background-color: #006b07;
+  border-radius: 20px 0 0 20px;
+}
+
+.minimalWear {
+  width: 8%;
+  height: 100%;
+  background-color: #69a702;
+}
+
+.fieldTested {
+  width: 23%;
+  height: 100%;
+  background-color: #ffae00;
+}
+
+.wellWorn {
+  width: 7%;
+  height: 100%;
+  background-color: #ff7119;
+}
+
+.battleScarred {
+  width: 55%;
+  height: 100%;
+  background-color: #d32b2b;
+  border-radius: 0 20px 20px 0;
+}
