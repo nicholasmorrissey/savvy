@@ -50,6 +50,41 @@ const MarketSidebar: FC<MarketSidebarProps> = ({ filters }) => {
       </ul>
       <Header label="Filters" />
       <Subheader label="Price" />
+      <div style={{ marginTop: "0.5rem", marginBottom: "0.2rem" }}>
+        <ReactSlider
+          // className="horizontal-slider"
+          thumbClassName="floatThumb"
+          trackClassName={"floatTrack"}
+          defaultValue={[0, 100]}
+          ariaLabel={["Lower thumb", "Upper thumb"]}
+          ariaValuetext={(state) => `Thumb value ${state.valueNow}`}
+          renderThumb={(props, state) => (
+            <div {...props} style={{ ...props.style, outline: 0 }}>
+              <div style={{ width: 0, position: "relative" }}>
+                <div className="floatMarker" />
+              </div>
+            </div>
+          )}
+          pearling
+          withTracks
+        />
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            marginBottom: "1rem",
+          }}
+        >
+          <div
+            style={{
+              height: "0.7rem",
+              background: "linear-gradient(to right, #23233d, #5656b3)",
+              borderRadius: "20px",
+              width: "100%",
+            }}
+          />
+        </div>
+      </div>
       <div
         style={{
           display: "flex",
@@ -107,7 +142,7 @@ const MarketSidebar: FC<MarketSidebarProps> = ({ filters }) => {
               display: "flex",
               alignItems: "center",
               width: "100%",
-              marginTop: "0.5rem",
+              marginTop: "0.2rem",
             }}
           >
             <TextInput
