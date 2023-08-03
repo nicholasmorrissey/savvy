@@ -8,13 +8,16 @@ import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import { ScoredListing } from "@/types/Listing";
 import { getListingScore } from "@/utils/utils";
 import ListingCard from "./ListingCard";
+import ListingFilters from "@/types/ListingFilters";
 
 interface MarketListingsProps {
+  filters: ListingFilters;
   smallRes?: boolean;
 }
 
-const MarketListings: FC<MarketListingsProps> = ({ smallRes }) => {
+const MarketListings: FC<MarketListingsProps> = ({ smallRes, filters }) => {
   const [scoredListings, setScoredListings] = useState<ScoredListing[]>([]);
+  const [filteredListings, setFilteredListings] = useState<ScoredListing[]>([]);
 
   const [sort, setSort] = useState<Sort>(Sort.RatingDsc);
 
@@ -96,6 +99,40 @@ const MarketListings: FC<MarketListingsProps> = ({ smallRes }) => {
       });
   }, []);
 
+  useEffect(() => {
+    setFilteredListings(filterListings());
+  }, [scoredListings, filters]);
+
+  const filterListings = () => {
+    return sortedListings().filter((listing) => {
+      const realPrice = listing.price ? listing.price / 100 : 0;
+
+      if (realPrice && filters.minPrice && realPrice < filters.minPrice)
+        return false;
+      if (realPrice / 100 && filters.maxPrice && realPrice > filters.maxPrice)
+        return false;
+      if (listing.float && filters.minFloat && listing.float < filters.minFloat)
+        return false;
+      if (listing.float && filters.maxFloat && listing.float > filters.maxFloat)
+        return false;
+      if (
+        (filters.collections.length > 0 &&
+          listing.skins?.collection_id &&
+          !filters.collections.includes(listing.skins.collection_id)) ||
+        (filters.collections.length > 0 && !listing.skins?.collection_id)
+      )
+        return false;
+      if (
+        listing.skins?.quality &&
+        filters.rarities.length > 0 &&
+        !filters.rarities.includes(listing.skins.quality)
+      )
+        return false;
+
+      return true;
+    });
+  };
+
   return (
     <div
       style={{
@@ -133,7 +170,7 @@ const MarketListings: FC<MarketListingsProps> = ({ smallRes }) => {
                   margin: "0",
                 }}
               >
-                {scoredListings.length}
+                {filteredListings.length}
               </h3>
             </div>
           ) : (
@@ -146,7 +183,7 @@ const MarketListings: FC<MarketListingsProps> = ({ smallRes }) => {
               <Skeleton width="80px" height="37px" inline />
             </SkeletonTheme>
           )}
-          <h2 style={{ marginLeft: "1rem" }}>Listings</h2>
+          <h2 style={{ marginLeft: "1rem" }}>Items</h2>
         </div>
         <div style={{ flex: 1 }} />
         <SortSelect sort={sort} setSort={setSort} />
@@ -200,11 +237,9 @@ const MarketListings: FC<MarketListingsProps> = ({ smallRes }) => {
                 flexWrap: "wrap",
               }}
             >
-              {sortedListings()
-                .slice(0, 84)
-                .map((listing) => (
-                  <ListingCard listing={listing} key={listing.id} />
-                ))}
+              {filteredListings.slice(0, 84).map((listing) => (
+                <ListingCard listing={listing} key={listing.id} />
+              ))}
             </div>
           ) : (
             <SkeletonTheme

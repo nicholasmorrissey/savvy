@@ -36,3 +36,11 @@ export async function getSkinCollection(collection_id: number) {
 
   return data;
 }
+
+export async function getAllCollections() {
+  const supabase = createServerComponentClient({ cookies });
+
+  const { data, error } = await supabase.from("collections").select();
+
+  return data;
+}

@@ -8,10 +8,13 @@ import { useResizeDetector } from "react-resize-detector";
 import MarketSidebar from "@/components/MarketSidebar";
 import Navbar from "@/components/Navbar";
 import MarketListings from "@/components/MarketListings";
+import ListingFilters from "@/types/ListingFilters";
 
 export default function Home() {
   const { width, ref } = useResizeDetector();
   const smallRes = width ? width < 2000 : false;
+
+  const [filters, setFilters] = React.useState<ListingFilters>();
 
   return (
     <div>
@@ -58,8 +61,8 @@ export default function Home() {
               paddingRight: "2rem",
             }}
           >
-            <MarketSidebar />
-            <MarketListings smallRes={smallRes} />
+            <MarketSidebar setFilters={setFilters} />
+            <MarketListings smallRes={smallRes} filters={filters} />
           </div>
         </div>
       </main>

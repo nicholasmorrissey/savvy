@@ -1,0 +1,15 @@
+.buttonContainer {
+  border-radius: 20px;
+  padding: 5px;
+  border: 1px solid rgb(84 84 117);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button {
+  width: 8px;
+  height: 8px;
+  border-radius: 10px;
+  background-color: rgb(106, 106, 147);
+}

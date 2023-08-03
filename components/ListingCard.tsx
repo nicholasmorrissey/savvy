@@ -124,7 +124,7 @@ const ListingCard: FC<ListingCardProps> = ({ listing }) => {
 
   const fetchCollection = async () => {
     if (floatRankings?.length > 0) return;
-    await fetch("/api/db/collections", {
+    await fetch("/api/db/collection", {
       method: "POST",
       body: JSON.stringify({
         collection_id: listing.skins.collection_id,
@@ -149,7 +149,7 @@ const ListingCard: FC<ListingCardProps> = ({ listing }) => {
           <p>Price difference</p>
           <span style={{ flex: 1 }} />
           <p style={{ color: "#2da156", fontWeight: "bold" }}>
-            {Math.round(listing.score.priceDifference)}
+            +{Math.round(listing.score.priceDifference)}
           </p>
         </div>
       )}
@@ -164,7 +164,7 @@ const ListingCard: FC<ListingCardProps> = ({ listing }) => {
           <p>Float ranking</p>
           <span style={{ flex: 1 }} />
           <p style={{ color: "#2da156", fontWeight: "bold" }}>
-            {Math.round(listing.score.floatRank)}
+            +{Math.round(listing.score.floatRank)}
           </p>
         </div>
       )}
@@ -179,7 +179,7 @@ const ListingCard: FC<ListingCardProps> = ({ listing }) => {
           <p>Collection age</p>
           <span style={{ flex: 1 }} />
           <p style={{ color: "#2da156", fontWeight: "bold" }}>
-            {Math.round(listing.score.collectionDate)}
+            +{Math.round(listing.score.collectionDate)}
           </p>
         </div>
       )}
@@ -188,7 +188,7 @@ const ListingCard: FC<ListingCardProps> = ({ listing }) => {
           <p>StatTrak</p>
           <span style={{ flex: 1 }} />
           <p style={{ color: "#2da156", fontWeight: "bold" }}>
-            {Math.round(listing.score.statTrak)}
+            +{Math.round(listing.score.statTrak)}
           </p>
         </div>
       )}
