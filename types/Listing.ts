@@ -26,6 +26,8 @@ export interface EnrichedListing extends Listing {
     name: string | null;
     weapon: string | null;
     quality: string | null;
+    min_float: number | null;
+    max_float: number | null;
     collection_id: number | null;
     collections: {
       name: string | null;

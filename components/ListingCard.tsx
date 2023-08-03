@@ -136,6 +136,10 @@ const ListingCard: FC<ListingCardProps> = ({ listing }) => {
       });
   };
 
+  const minFloatWidth = (listing.skins?.min_float ?? 0) * 100;
+  const maxFloatWidth = (1 - (listing.skins?.max_float ?? 1)) * 100;
+  const floatRange = 100 - (maxFloatWidth - minFloatWidth);
+
   const scoreCard = ReactDOMServer.renderToStaticMarkup(
     <div style={{ width: "180px", padding: "0.5rem" }}>
       {listing.score.priceDifference !== 0 && (
@@ -584,6 +588,44 @@ const ListingCard: FC<ListingCardProps> = ({ listing }) => {
                     {Math.round(listing.score.total)}
                   </div>
                 </div>
+              </div>
+            </div>
+            <div style={{ height: 0, position: "relative", width: "100%" }}>
+              <div
+                style={{
+                  position: "absolute",
+                  display: "flex",
+                  width: "100%",
+                  alignItems: "center",
+                  height: "0.5rem",
+                  borderRadius: "20px",
+                }}
+              >
+                <div
+                  style={{
+                    backgroundColor: "black",
+                    opacity: 0.7,
+                    width: `${Math.round(minFloatWidth)}%`,
+                    height: "100%",
+                    borderRadius: "20px 0 0 20px",
+                  }}
+                />
+                <div
+                  style={{
+                    opacity: 0,
+                    width: `${Math.round(floatRange)}%`,
+                    height: "100%",
+                  }}
+                />
+                <div
+                  style={{
+                    backgroundColor: "black",
+                    opacity: 0.7,
+                    width: `${Math.round(maxFloatWidth)}%`,
+                    height: "100%",
+                    borderRadius: "0 20px 20px 0",
+                  }}
+                />
               </div>
             </div>
             <div className={styles.floatBarContainer}>

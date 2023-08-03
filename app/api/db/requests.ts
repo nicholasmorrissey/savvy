@@ -7,7 +7,7 @@ export async function getAllListings() {
   const { data, error } = await supabase
     .from("listings")
     .select(
-      "*, skins(name, weapon, quality, collection_id, collections(name, collection_image, collection_date))"
+      "*, skins(name, weapon, quality, min_float, max_float, collection_id, collections(name, collection_image, collection_date))"
     )
     .is("archived_date", null);
 

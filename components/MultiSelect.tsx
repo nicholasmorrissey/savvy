@@ -2,22 +2,7 @@ import { FC } from "react";
 import "react-loading-skeleton/dist/skeleton.css";
 import Select from "react-select";
 import React from "react";
-import { InputActionMeta } from "react-select";
-import StateManagedSelect, {
-  StateManagerProps,
-} from "react-select/dist/declarations/src/stateManager";
-
-interface MultiSelectProps {
-  options: { label: string; value: string }[];
-  setValue: React.Dispatch<
-    React.SetStateAction<
-      {
-        label: string;
-        value: string;
-      }[]
-    >
-  >;
-}
+import { StateManagerProps } from "react-select/dist/declarations/src/stateManager";
 
 const MultiSelect: FC<StateManagerProps> = ({ ...props }) => {
   return (
