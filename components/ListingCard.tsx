@@ -468,47 +468,45 @@ const ListingCard: FC<ListingCardProps> = ({ listing }) => {
                 </p>
               </div>
               <div style={{ display: "flex", alignItems: "flex-start" }}>
-                <img
-                  data-tooltip-id="collection"
-                  data-tooltip-html={collection}
-                  src={listing.skins.collections?.collection_image ?? ""}
-                  style={{
-                    maxHeight: "55px",
-                    maxWidth: "55px",
-                    marginTop: "0.2rem",
-                  }}
-                  onMouseEnter={() => fetchCollection()}
-                />
+                <div className={styles.subCategoryContainer}>
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    <p className={styles.subCategory}>{listing.skins.weapon}</p>
+                  </div>
+                </div>
+
                 <div style={{ flex: 1 }} />
                 <p className={styles.suggestedPrice}>
                   ${listing.market_price && listing.market_price / 100}
                 </p>
               </div>
+              {listing.stat_trak && (
+                <p
+                  style={{
+                    color: "#ff7e23",
+                    fontSize: "0.8em",
+                    paddingTop: "0.3rem",
+                    fontWeight: "bold",
+                  }}
+                >
+                  {listing.stat_trak ? "StatTrak™" : ""}
+                </p>
+              )}
               <div style={{ flex: 1 }} />
+              <img
+                data-tooltip-id="collection"
+                data-tooltip-html={collection}
+                src={listing.skins.collections?.collection_image ?? ""}
+                style={{
+                  maxHeight: "55px",
+                  maxWidth: "55px",
+                  marginTop: "0.2rem",
+                }}
+                onMouseEnter={() => fetchCollection()}
+              />
               <div style={{ display: "flex", alignItems: "flex-end" }}>
                 <div
                   style={{ display: "flex", flexDirection: "column", flex: 1 }}
                 >
-                  {listing.stat_trak && (
-                    <p
-                      style={{
-                        color: "#ff7e23",
-                        paddingRight: "0.4rem",
-                        fontSize: "0.8em",
-                        paddingBottom: "0.3rem",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      {listing.stat_trak ? "StatTrak™" : ""}
-                    </p>
-                  )}
-                  <div className={styles.subCategoryContainer}>
-                    <div style={{ display: "flex", alignItems: "center" }}>
-                      <p className={styles.subCategory}>
-                        {listing.skins.weapon}
-                      </p>
-                    </div>
-                  </div>
                   <div className={styles.wearContainer}>
                     {listing.float_rank && listing.float_rank > 0 ? (
                       <div

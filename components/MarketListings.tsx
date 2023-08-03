@@ -101,7 +101,7 @@ const MarketListings: FC<MarketListingsProps> = ({ smallRes, filters }) => {
 
   useEffect(() => {
     setFilteredListings(filterListings());
-  }, [scoredListings, filters]);
+  }, [scoredListings, filters, sort]);
 
   const filterListings = () => {
     return sortedListings().filter((listing) => {
