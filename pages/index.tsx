@@ -37,9 +37,11 @@ export default function Home() {
             className="wave"
             style={{ background: "url('wave.png') repeat-x" }}
           ></div>
+        </div>
+        <div className="ocean2">
           <div
             className="wave wave2"
-            style={{ background: "url('wave.png') repeat-x", opacity: 0.8 }}
+            style={{ background: "url('wave.png') repeat-x" }}
           ></div>
         </div>
         <div

@@ -20,7 +20,17 @@ body {
   bottom: 0;
   left: 0;
   background-image: linear-gradient(to bottom, #593c90, #573b8d, #383145);
-  opacity: 0.35;
+  opacity: 0.3;
+}
+
+.ocean2 {
+  height: 28%;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  background-image: linear-gradient(to bottom, #593c90, #573b8d, #383145);
+  opacity: 0.2;
 }
 
 .wave {
@@ -33,7 +43,7 @@ body {
   animation: wave 9s linear infinite;
 }
 
-.wave:nth-of-type(2) {
+.wave2 {
   top: -168px;
   animation: swell 3s ease infinite;
   opacity: 1;
