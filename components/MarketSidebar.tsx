@@ -30,6 +30,10 @@ const MarketSidebar: FC<MarketSidebarProps> = ({ setFilters }) => {
 
   const [collections, setCollections] = useState<Collection[]>([]);
 
+  const [ratingFocus, setRatingFocus] = useState<"Top floats" | "Trade ups">(
+    "Top floats"
+  );
+
   const calculateExponentialPrice = (price: any) => {
     const scaledPrice = Math.pow(price / 1000, priceExponetialFactor);
 
@@ -107,7 +111,11 @@ const MarketSidebar: FC<MarketSidebarProps> = ({ setFilters }) => {
             alignItems: "center",
           }}
         >
-          <RadioButton label="Top floats" />
+          <RadioButton
+            label="Top floats"
+            checked={ratingFocus === "Top floats"}
+            onClick={() => setRatingFocus("Top floats")}
+          />
         </li>
         <li
           style={{
@@ -116,7 +124,11 @@ const MarketSidebar: FC<MarketSidebarProps> = ({ setFilters }) => {
             alignItems: "center",
           }}
         >
-          <RadioButton label="Trade ups" />
+          <RadioButton
+            label="Trade ups"
+            checked={ratingFocus === "Trade ups"}
+            onClick={() => setRatingFocus("Trade ups")}
+          />
         </li>
       </ul>
       <Header label="Filters" />

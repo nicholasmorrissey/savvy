@@ -7,9 +7,16 @@
   justify-content: center;
 }
 
-.button {
+.buttonChecked {
   width: 8px;
   height: 8px;
   border-radius: 10px;
   background-color: rgb(106, 106, 147);
+}
+
+.buttonUnchecked {
+  width: 8px;
+  height: 8px;
+  border-radius: 10px;
+  background-color: inherit;
 }

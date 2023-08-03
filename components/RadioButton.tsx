@@ -9,11 +9,22 @@ interface RadioButtonProps {
   onClick?: () => void;
 }
 
-const RadioButton: FC<RadioButtonProps> = ({ checked, label }) => {
+const RadioButton: FC<RadioButtonProps> = ({ checked, label, onClick }) => {
   return (
-    <span style={{ display: "flex", alignItems: "center" }}>
+    <span
+      style={{
+        display: "flex",
+        alignItems: "center",
+        cursor: "pointer",
+      }}
+      onClick={() => (onClick ? onClick() : null)}
+    >
       <div className="buttonContainer">
-        <div className="button" />
+        {checked ? (
+          <div className="buttonChecked" />
+        ) : (
+          <div className="buttonUnchecked" />
+        )}
       </div>
       {label && (
         <span style={{ color: "#6a6a93", paddingLeft: "1rem" }}>{label}</span>
