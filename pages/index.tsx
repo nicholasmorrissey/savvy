@@ -14,7 +14,14 @@ export default function Home() {
   const { width, ref } = useResizeDetector();
   const smallRes = width ? width < 2000 : false;
 
-  const [filters, setFilters] = React.useState<ListingFilters>();
+  const [filters, setFilters] = React.useState<ListingFilters>({
+    minPrice: 0.2,
+    maxPrice: 15000,
+    minFloat: 0,
+    maxFloat: 1,
+    collections: [],
+    rarities: [],
+  });
 
   return (
     <div>

@@ -10,7 +10,7 @@ import MultiSelect from "./MultiSelect";
 import Collection from "@/types/Collection";
 
 interface MarketSidebarProps {
-  setFilters: React.Dispatch<React.SetStateAction<ListingFilters | undefined>>;
+  setFilters: React.Dispatch<React.SetStateAction<ListingFilters>>;
 }
 
 const MarketSidebar: FC<MarketSidebarProps> = ({ setFilters }) => {
