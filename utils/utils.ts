@@ -1,7 +1,11 @@
 import { EnrichedListing } from "../types/Listing";
 
 export const getListingScore = async (listing: EnrichedListing) => {
-  function calculateFloatMultiplier(floatValue, floatRange, originalRange) {
+  function calculateFloatMultiplier(
+    floatValue: number,
+    floatRange: number[],
+    originalRange: number[]
+  ) {
     const [minFloat, maxFloat] = floatRange;
     const [originalMinFloat, originalMaxFloat] = originalRange;
 
@@ -53,13 +57,21 @@ export const getListingScore = async (listing: EnrichedListing) => {
   ];
 
   // Find the matching range based on the float value
-  const matchedRange = ranges.find((range) => listing.float <= range.max);
-
-  const floatRangeMultiplier = calculateFloatMultiplier(
-    listing.float,
-    [matchedRange.min, matchedRange.max],
-    [listing.skins.min_float, listing.skins.max_float]
+  const matchedRange = ranges.find(
+    (range) => listing.float && listing.float <= range.max
   );
+
+  const floatRangeMultiplier =
+    listing.float &&
+    matchedRange &&
+    listing.skins.min_float &&
+    listing.skins.max_float
+      ? calculateFloatMultiplier(
+          listing.float,
+          [matchedRange.min, matchedRange.max],
+          [listing.skins.min_float, listing.skins.max_float]
+        )
+      : null;
 
   const priceDifference =
     listing.market_price && listing.price
@@ -124,7 +136,7 @@ export const getListingScore = async (listing: EnrichedListing) => {
 
   // const statTrakMultiplier = listing.stat_trak ? 1.1 : 1;
 
-  const floatRangeScore = priceDifference * floatRangeMultiplier;
+  const floatRangeScore = priceDifference * (floatRangeMultiplier ?? 0);
   const floatRankScore =
     priceDifference * floatRankMultiplier - priceDifference;
 
