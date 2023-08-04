@@ -236,9 +236,11 @@ const ListingCard: FC<ListingCardProps> = ({ listing }) => {
       style={{
         width: "240px",
         padding: "0.5rem",
-        paddingTop: 0,
       }}
     >
+      <p style={{ fontWeight: "bold", paddingBottom: "1rem" }}>
+        Float rankings
+      </p>
       {floatRankings.length > 0 ? (
         floatRankings
           .map((ranking: FloatRank, index) => {
@@ -259,7 +261,7 @@ const ListingCard: FC<ListingCardProps> = ({ listing }) => {
                   width: "100%",
                   display: "flex",
                   alignItems: "center",
-                  paddingTop: "0.4rem",
+                  paddingBottom: "0.4rem",
                   color: index === rank - 1 ? "#8b8bdf" : "white",
                   fontWeight: index === rank - 1 ? "bold" : "normal",
                   opacity: opacity,
