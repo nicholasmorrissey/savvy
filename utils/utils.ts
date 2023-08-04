@@ -9,43 +9,24 @@ export const getListingScore = async (listing: EnrichedListing) => {
     const [minFloat, maxFloat] = floatRange;
     const [originalMinFloat, originalMaxFloat] = originalRange;
 
-    // Calculate the distance from the top and bottom of the range
-    const distanceToTop = maxFloat - floatValue;
-    const distanceToBottom = floatValue - minFloat;
-
-    // Calculate the maximum distance within the range
-    const maxDistance = Math.max(distanceToTop, distanceToBottom);
-
     // Calculate the actual top and bottom of the cut-off range
-    const actualTop = originalMaxFloat - (originalMaxFloat - maxFloat);
-    const actualBottom = originalMinFloat + (minFloat - originalMinFloat);
+    const actualTop =
+      originalMaxFloat > 0 && originalMaxFloat < maxFloat
+        ? originalMaxFloat
+        : maxFloat;
+    const actualBottom =
+      originalMaxFloat < 1 && originalMinFloat > minFloat
+        ? originalMinFloat
+        : minFloat;
 
-    // Calculate the percentage of the cut-off range remaining
-    const rangePercentageRemaining =
+    // Calculate the normalized float value within the actual float range
+    const normalizedFloatValue =
       (floatValue - actualBottom) / (actualTop - actualBottom);
-    const invertedPercentage = 1 - rangePercentageRemaining;
 
-    // Calculate the base multiplier based on the distance to the top or bottom
-    const baseMultiplier = maxDistance / Math.max(maxFloat - minFloat, 0.0001);
+    // Ensure the floatRangeMultiplier is within the range [0, 1]
+    const floatRangeMultiplier = Math.max(Math.min(normalizedFloatValue, 1), 0);
 
-    // Calculate the cutoff-adjusted multiplier
-    const cutoffMultiplier = (baseMultiplier * 0.6 - 0.3) * invertedPercentage;
-
-    console.log({
-      floatValue,
-      floatRange,
-      originalRange,
-      distanceToTop,
-      distanceToBottom,
-      maxDistance,
-      actualTop,
-      actualBottom,
-      rangePercentageRemaining,
-      invertedPercentage,
-      baseMultiplier,
-      cutoffMultiplier,
-    });
-    return cutoffMultiplier;
+    return floatRangeMultiplier;
   }
 
   const ranges = [
@@ -61,17 +42,11 @@ export const getListingScore = async (listing: EnrichedListing) => {
     (range) => listing.float && listing.float <= range.max
   );
 
-  const floatRangeMultiplier =
-    listing.float &&
-    matchedRange &&
-    listing.skins.min_float &&
-    listing.skins.max_float
-      ? calculateFloatMultiplier(
-          listing.float,
-          [matchedRange.min, matchedRange.max],
-          [listing.skins.min_float, listing.skins.max_float]
-        )
-      : null;
+  const floatRangeMultiplier = calculateFloatMultiplier(
+    listing.float ?? 0,
+    [matchedRange?.min ?? 0, matchedRange?.max ?? 1],
+    [listing.skins.min_float ?? 0, listing.skins.max_float ?? 1]
+  );
 
   const priceDifference =
     listing.market_price && listing.price
@@ -136,13 +111,21 @@ export const getListingScore = async (listing: EnrichedListing) => {
 
   // const statTrakMultiplier = listing.stat_trak ? 1.1 : 1;
 
-  const floatRangeScore = priceDifference * (floatRangeMultiplier ?? 0);
+  const minScore = priceDifference;
+  const maxScore = -priceDifference;
+  const baseMultiplier = (maxScore - minScore) / 2;
+  const floatRangeScore = minScore + floatRangeMultiplier * 2 * baseMultiplier;
+
+  // const floatRangeScore =
+  //   -priceDifference +
+  //   floatRangeMultiplier * (priceDifference - -priceDifference);
+
+  // const floatRangeScore = priceDifference * (floatRangeMultiplier ?? 0);
+
   const floatRankScore =
     priceDifference * floatRankMultiplier - priceDifference;
 
   const score = floatRankScore + priceDifference + floatRangeScore;
-
-  console.log(floatRangeScore);
 
   return {
     total: score,

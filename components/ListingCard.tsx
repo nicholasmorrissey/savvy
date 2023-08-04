@@ -219,12 +219,18 @@ const ListingCard: FC<ListingCardProps> = ({ listing }) => {
           </p>
         </div>
       )}
-      {listing.score.floatRangeMultiplier >= 1 && (
+      {listing.score.floatRangeMultiplier && (
         <div style={{ display: "flex", alignItems: "center" }}>
           <p style={{ opacity: 0.5 }}>Position in float range</p>
           <span style={{ flex: 1 }} />
-          <p style={{ color: "#2da156", fontWeight: "bold" }}>
-            +{Math.round(listing.score.floatRangeMultiplier)}
+          <p
+            style={{
+              color: listing.score.floatRangeMultiplier > 0 ? "#2da156" : "red",
+              fontWeight: "bold",
+            }}
+          >
+            {listing.score.floatRangeMultiplier > 0 && "+"}
+            {Math.round(listing.score.floatRangeMultiplier)}
           </p>
         </div>
       )}
