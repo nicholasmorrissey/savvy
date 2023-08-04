@@ -9,6 +9,7 @@ import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import FloatRank from "@/types/FloatRank";
 import Skin from "@/types/Skin";
+import MarketPrice from "@/types/MarketPrice";
 
 const exteriorAbbreviation = (exterior: string) => {
   switch (exterior) {
@@ -105,6 +106,8 @@ const ListingCard: FC<ListingCardProps> = ({ listing }) => {
   const [hovered, setHovered] = useState(false);
   const [floatRankings, setFloatRankings] = useState<FloatRank[]>([]);
   const [collectionSkins, setCollectionSkins] = useState<Skin[]>([]);
+  const [prices, setPrices] = useState<MarketPrice[]>([]);
+  const [noPrices, setNoPrices] = useState(false);
 
   const rank = listing.float_rank ?? -1;
 
@@ -136,12 +139,32 @@ const ListingCard: FC<ListingCardProps> = ({ listing }) => {
       });
   };
 
+  const fetchPrices = async () => {
+    if (floatRankings?.length > 0) return;
+    await fetch("/api/db/prices", {
+      method: "POST",
+      body: JSON.stringify({
+        secondary_skin_id: listing.skins.secondary_skin_id,
+        exterior: listing.exterior,
+        stat_trak: listing.stat_trak,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (!data || data?.length === 0) setNoPrices(true);
+        setPrices(data);
+      });
+  };
+
   const minFloatWidth = (listing.skins?.min_float ?? 0) * 100;
   const maxFloatWidth = (1 - (listing.skins?.max_float ?? 1)) * 100;
   const floatRange = 100 - (maxFloatWidth - minFloatWidth);
 
   const scoreCard = ReactDOMServer.renderToStaticMarkup(
-    <div style={{ width: "180px", padding: "0.5rem" }}>
+    <div style={{ width: "220px", padding: "0.5rem" }}>
+      <p style={{ fontWeight: "bold", paddingBottom: "1rem" }}>
+        Rating breakdown
+      </p>
       {listing.score.priceDifference !== 0 && (
         <div
           style={{
@@ -150,7 +173,7 @@ const ListingCard: FC<ListingCardProps> = ({ listing }) => {
             marginBottom: "0.5rem",
           }}
         >
-          <p>Price difference</p>
+          <p style={{ opacity: 0.5 }}>Price difference</p>
           <span style={{ flex: 1 }} />
           <p style={{ color: "#2da156", fontWeight: "bold" }}>
             +{Math.round(listing.score.priceDifference)}
@@ -165,7 +188,7 @@ const ListingCard: FC<ListingCardProps> = ({ listing }) => {
             marginBottom: "0.5rem",
           }}
         >
-          <p>Float ranking</p>
+          <p style={{ opacity: 0.5 }}>Float ranking</p>
           <span style={{ flex: 1 }} />
           <p style={{ color: "#2da156", fontWeight: "bold" }}>
             +{Math.round(listing.score.floatRank)}
@@ -180,7 +203,7 @@ const ListingCard: FC<ListingCardProps> = ({ listing }) => {
             marginBottom: "0.5rem",
           }}
         >
-          <p>Collection age</p>
+          <p style={{ opacity: 0.5 }}>Collection age</p>
           <span style={{ flex: 1 }} />
           <p style={{ color: "#2da156", fontWeight: "bold" }}>
             +{Math.round(listing.score.collectionDate)}
@@ -189,10 +212,19 @@ const ListingCard: FC<ListingCardProps> = ({ listing }) => {
       )}
       {listing.score.statTrak !== 0 && (
         <div style={{ display: "flex", alignItems: "center" }}>
-          <p>StatTrak</p>
+          <p style={{ opacity: 0.5 }}>StatTrak</p>
           <span style={{ flex: 1 }} />
           <p style={{ color: "#2da156", fontWeight: "bold" }}>
             +{Math.round(listing.score.statTrak)}
+          </p>
+        </div>
+      )}
+      {listing.score.floatRangeMultiplier >= 1 && (
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <p style={{ opacity: 0.5 }}>Position in float range</p>
+          <span style={{ flex: 1 }} />
+          <p style={{ color: "#2da156", fontWeight: "bold" }}>
+            +{Math.round(listing.score.floatRangeMultiplier)}
           </p>
         </div>
       )}
@@ -379,6 +411,97 @@ const ListingCard: FC<ListingCardProps> = ({ listing }) => {
     </div>
   );
 
+  const priceCard = ReactDOMServer.renderToStaticMarkup(
+    <div
+      style={{
+        width: "250px",
+        paddingBottom: "1rem",
+        paddingTop: "0.7rem",
+      }}
+    >
+      <p
+        style={{
+          fontWeight: "bold",
+          paddingBottom: "1rem",
+          paddingLeft: "0.6rem",
+        }}
+      >
+        Market prices
+      </p>
+      {prices?.length > 0 ? (
+        [
+          ...prices,
+          {
+            Market_Listing_ID: "0",
+            Market_Name: "Item price",
+            price: listing.price && listing.price / 100,
+            created_at: "",
+            Skin_Base_Id: "0",
+            Skin_Link: "",
+            Wear: "",
+          },
+        ]
+          .sort((a, b) => (a.price && b.price && a.price < b.price ? -1 : 1))
+          .map((price: MarketPrice, index) => {
+            return (
+              <div
+                key={price.Market_Listing_ID}
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  padding: "0.4rem",
+                  paddingBottom: "0.2rem",
+                  paddingLeft: "0.6rem",
+                  paddingRight: "0.6rem",
+                  backgroundColor: index % 2 === 0 ? "#212121" : "inherit",
+                }}
+              >
+                <p
+                  style={{
+                    marginRight: "1rem",
+                    opacity: price.Market_Name === "Item price" ? 1 : 0.4,
+                    color: price.Market_Name === "Item price" ? "#8b8bdf" : "",
+                    fontWeight:
+                      price.Market_Name === "Item price" ? "bold" : "",
+                  }}
+                >
+                  {price.Market_Name}
+                </p>
+                <div style={{ flex: 1 }} />
+                <p
+                  style={{
+                    color: price.Market_Name === "Item price" ? "#8b8bdf" : "",
+                    fontWeight:
+                      price.Market_Name === "Item price" ? "bold" : "",
+                  }}
+                >
+                  ${price.price?.toFixed(2)}
+                </p>
+              </div>
+            );
+          })
+      ) : noPrices ? (
+        <p style={{ paddingLeft: "0.6rem", opacity: 0.4 }}>No prices found</p>
+      ) : (
+        <SkeletonTheme
+          baseColor="#353535"
+          highlightColor="#494949"
+          borderRadius="10px"
+          duration={2}
+        >
+          <Skeleton
+            count={1}
+            width="100%"
+            height="10px"
+            inline
+            style={{ marginTop: "0.4rem" }}
+          />
+        </SkeletonTheme>
+      )}
+    </div>
+  );
+
   return (
     <div
       style={{
@@ -417,6 +540,15 @@ const ListingCard: FC<ListingCardProps> = ({ listing }) => {
           <Tooltip
             id="collection"
             place="left"
+            style={{
+              zIndex: 100,
+              backgroundColor: "#1a1a1a",
+            }}
+            opacity={1}
+          />
+          <Tooltip
+            id="prices"
+            place="right"
             style={{
               zIndex: 100,
               backgroundColor: "#1a1a1a",
@@ -464,6 +596,18 @@ const ListingCard: FC<ListingCardProps> = ({ listing }) => {
                 className={styles.image}
               />
             </div>
+            <div
+              style={{
+                position: "absolute",
+                right: "15px",
+                top: "15px",
+                width: "70px",
+                height: "52px",
+              }}
+              data-tooltip-id="prices"
+              data-tooltip-html={priceCard}
+              onMouseEnter={() => fetchPrices()}
+            />
             <div className={styles.details}>
               <div className={styles.header}>
                 <p className={styles.name}>{listing.skins.name}</p>

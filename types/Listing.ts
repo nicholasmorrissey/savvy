@@ -34,6 +34,7 @@ export interface EnrichedListing extends Listing {
       collection_image: string | null;
       collection_date: string | null;
     } | null;
+    secondary_skin_id: string | null;
   };
 }
 
@@ -44,5 +45,6 @@ export interface ScoredListing extends EnrichedListing {
     floatRank: number;
     collectionDate: number;
     statTrak: number;
+    floatRangeMultiplier: number;
   };
 }
