@@ -169,74 +169,97 @@ const ListingCard: FC<ListingCardProps> = ({ listing, scoreFocus }) => {
       <p style={{ fontWeight: "bold", paddingBottom: "1rem" }}>
         Rating breakdown
       </p>
-      {listing.score.priceDifference !== 0 && (
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            marginBottom: "0.5rem",
-          }}
-        >
-          <p style={{ opacity: 0.5 }}>Price difference</p>
-          <span style={{ flex: 1 }} />
-          <p style={{ color: "#2da156", fontWeight: "bold" }}>
-            +{Math.round(listing.score.priceDifference)}
-          </p>
-        </div>
-      )}
-      {listing.score.floatRank !== 0 && (
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            marginBottom: "0.5rem",
-          }}
-        >
-          <p style={{ opacity: 0.5 }}>Float ranking</p>
-          <span style={{ flex: 1 }} />
-          <p style={{ color: "#2da156", fontWeight: "bold" }}>
-            +{Math.round(listing.score.floatRank)}
-          </p>
-        </div>
-      )}
-      {listing.score.collectionDate !== 0 && (
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            marginBottom: "0.5rem",
-          }}
-        >
-          <p style={{ opacity: 0.5 }}>Collection age</p>
-          <span style={{ flex: 1 }} />
-          <p style={{ color: "#2da156", fontWeight: "bold" }}>
-            +{Math.round(listing.score.collectionDate)}
-          </p>
-        </div>
-      )}
-      {listing.score.statTrak !== 0 && (
-        <div style={{ display: "flex", alignItems: "center" }}>
-          <p style={{ opacity: 0.5 }}>StatTrak</p>
-          <span style={{ flex: 1 }} />
-          <p style={{ color: "#2da156", fontWeight: "bold" }}>
-            +{Math.round(listing.score.statTrak)}
-          </p>
-        </div>
-      )}
-      {listing.score.floatRangeMultiplier && (
-        <div style={{ display: "flex", alignItems: "center" }}>
-          <p style={{ opacity: 0.5 }}>Position in float range</p>
-          <span style={{ flex: 1 }} />
-          <p
-            style={{
-              color: listing.score.floatRangeMultiplier > 0 ? "#2da156" : "red",
-              fontWeight: "bold",
-            }}
-          >
-            {listing.score.floatRangeMultiplier > 0 && "+"}
-            {Math.round(listing.score.floatRangeMultiplier)}
-          </p>
-        </div>
+      {scoreFocus === "Top floats" ? (
+        <>
+          {listing.score.priceDifference !== 0 && (
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                marginBottom: "0.5rem",
+              }}
+            >
+              <p style={{ opacity: 0.5 }}>Price difference</p>
+              <span style={{ flex: 1 }} />
+              <p style={{ color: "#2da156", fontWeight: "bold" }}>
+                +{Math.round(listing.score.priceDifference)}
+              </p>
+            </div>
+          )}
+          {listing.score.floatRank !== 0 && (
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                marginBottom: "0.5rem",
+              }}
+            >
+              <p style={{ opacity: 0.5 }}>Float ranking</p>
+              <span style={{ flex: 1 }} />
+              <p style={{ color: "#2da156", fontWeight: "bold" }}>
+                +{Math.round(listing.score.floatRank)}
+              </p>
+            </div>
+          )}
+          {listing.score.collectionDate !== 0 && (
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                marginBottom: "0.5rem",
+              }}
+            >
+              <p style={{ opacity: 0.5 }}>Collection age</p>
+              <span style={{ flex: 1 }} />
+              <p style={{ color: "#2da156", fontWeight: "bold" }}>
+                +{Math.round(listing.score.collectionDate)}
+              </p>
+            </div>
+          )}
+          {listing.score.statTrak !== 0 && (
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <p style={{ opacity: 0.5 }}>StatTrak</p>
+              <span style={{ flex: 1 }} />
+              <p style={{ color: "#2da156", fontWeight: "bold" }}>
+                +{Math.round(listing.score.statTrak)}
+              </p>
+            </div>
+          )}
+          {listing.score.floatRangeMultiplier && (
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <p style={{ opacity: 0.5 }}>Position in float range</p>
+              <span style={{ flex: 1 }} />
+              <p
+                style={{
+                  color:
+                    listing.score.floatRangeMultiplier > 0 ? "#2da156" : "red",
+                  fontWeight: "bold",
+                }}
+              >
+                {listing.score.floatRangeMultiplier > 0 && "+"}
+                {Math.round(listing.score.floatRangeMultiplier)}
+              </p>
+            </div>
+          )}
+        </>
+      ) : (
+        <>
+          {listing.score.stickerScore !== 0 && (
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                marginBottom: "0.5rem",
+              }}
+            >
+              <p style={{ opacity: 0.5 }}>Sticker price difference</p>
+              <span style={{ flex: 1 }} />
+              <p style={{ color: "#2da156", fontWeight: "bold" }}>
+                +{Math.round(listing.score.stickerScore)}
+              </p>
+            </div>
+          )}
+        </>
       )}
     </div>
   );
