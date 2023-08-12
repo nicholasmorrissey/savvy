@@ -382,8 +382,8 @@ const ListingCard: FC<ListingCardProps> = ({ listing, scoreFocus }) => {
                 width: "100%",
                 display: "flex",
                 alignItems: "center",
-                padding: "0.2rem",
-                paddingBottom: "0.2rem",
+                padding: "0.3rem",
+                paddingBottom: "0.3rem",
                 paddingLeft: "0.6rem",
                 paddingRight: "0.6rem",
                 backgroundColor: index % 2 === 0 ? "#202031" : "inherit",
@@ -601,7 +601,7 @@ const ListingCard: FC<ListingCardProps> = ({ listing, scoreFocus }) => {
                 {sticker.image_url && (
                   <img
                     src={sticker.image_url}
-                    style={{ width: "80px", marginRight: "0.5rem" }}
+                    style={{ width: "60px", marginRight: "0.5rem" }}
                   />
                 )}
                 <div style={{ display: "flex", flex: 1 }}>
@@ -667,7 +667,7 @@ const ListingCard: FC<ListingCardProps> = ({ listing, scoreFocus }) => {
             style={{
               zIndex: 100,
               backgroundColor: "rgb(22, 22, 35)",
-              boxShadow: "0 0 20px rgba(0, 0, 0, 0.8)",
+              boxShadow: "0 0 20px rgba(0, 0, 0, 0.6)",
               borderRadius: "10px",
             }}
             border="1px solid #6a6a93"
@@ -679,7 +679,7 @@ const ListingCard: FC<ListingCardProps> = ({ listing, scoreFocus }) => {
             style={{
               zIndex: 100,
               backgroundColor: "rgb(22, 22, 35)",
-              boxShadow: "0 0 20px rgba(0, 0, 0, 0.8)",
+              boxShadow: "0 0 20px rgba(0, 0, 0, 0.6)",
               borderRadius: "10px",
             }}
             border="1px solid #6a6a93"
@@ -691,7 +691,7 @@ const ListingCard: FC<ListingCardProps> = ({ listing, scoreFocus }) => {
             style={{
               zIndex: 100,
               backgroundColor: "rgb(22, 22, 35)",
-              boxShadow: "0 0 20px rgba(0, 0, 0, 0.8)",
+              boxShadow: "0 0 20px rgba(0, 0, 0, 0.6)",
               borderRadius: "10px",
             }}
             border="1px solid #6a6a93"
@@ -703,7 +703,7 @@ const ListingCard: FC<ListingCardProps> = ({ listing, scoreFocus }) => {
             style={{
               zIndex: 100,
               backgroundColor: "rgb(22, 22, 35)",
-              boxShadow: "0 0 20px rgba(0, 0, 0, 0.8)",
+              boxShadow: "0 0 20px rgba(0, 0, 0, 0.6)",
               borderRadius: "10px",
             }}
             border="1px solid #6a6a93"
@@ -715,7 +715,7 @@ const ListingCard: FC<ListingCardProps> = ({ listing, scoreFocus }) => {
             style={{
               zIndex: 100,
               backgroundColor: "rgb(22, 22, 35)",
-              boxShadow: "0 0 20px rgba(0, 0, 0, 0.8)",
+              boxShadow: "0 0 20px rgba(0, 0, 0, 0.6)",
               borderRadius: "10px",
             }}
             border="1px solid #6a6a93"
