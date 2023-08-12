@@ -944,7 +944,11 @@ const ListingCard: FC<ListingCardProps> = ({ listing, scoreFocus }) => {
                       opacity: 0.75,
                       textShadow: "0px 0px 3px black",
                       color: listing.score
-                        ? scoreColor(listing.score.total)
+                        ? scoreColor(
+                            scoreFocus === "Top floats"
+                              ? listing.score.total
+                              : listing.score.stickerScore
+                          )
                         : "white",
                     }}
                   >
