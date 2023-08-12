@@ -11,9 +11,17 @@ import Collection from "@/types/Collection";
 
 interface MarketSidebarProps {
   setFilters: React.Dispatch<React.SetStateAction<ListingFilters>>;
+  scoreFocus: string;
+  setScoreFocus: React.Dispatch<
+    React.SetStateAction<"Stickers" | "Top floats">
+  >;
 }
 
-const MarketSidebar: FC<MarketSidebarProps> = ({ setFilters }) => {
+const MarketSidebar: FC<MarketSidebarProps> = ({
+  setFilters,
+  scoreFocus,
+  setScoreFocus,
+}) => {
   const priceStart = 0.02;
   const priceEnd = 15000;
   const priceRange = priceEnd - priceStart;
@@ -29,10 +37,6 @@ const MarketSidebar: FC<MarketSidebarProps> = ({ setFilters }) => {
   const [selectedRarities, setSelectedRarities] = useState<string[]>([]);
 
   const [collections, setCollections] = useState<Collection[]>([]);
-
-  const [ratingFocus, setRatingFocus] = useState<"Top floats" | "Trade ups">(
-    "Top floats"
-  );
 
   const calculateExponentialPrice = (price: any) => {
     const scaledPrice = Math.pow(price / 1000, priceExponetialFactor);
@@ -113,8 +117,8 @@ const MarketSidebar: FC<MarketSidebarProps> = ({ setFilters }) => {
         >
           <RadioButton
             label="Top floats"
-            checked={ratingFocus === "Top floats"}
-            onClick={() => setRatingFocus("Top floats")}
+            checked={scoreFocus === "Top floats"}
+            onClick={() => setScoreFocus("Top floats")}
           />
         </li>
         <li
@@ -125,9 +129,9 @@ const MarketSidebar: FC<MarketSidebarProps> = ({ setFilters }) => {
           }}
         >
           <RadioButton
-            label="Trade ups"
-            checked={ratingFocus === "Trade ups"}
-            onClick={() => setRatingFocus("Trade ups")}
+            label="Stickers"
+            checked={scoreFocus === "Stickers"}
+            onClick={() => setScoreFocus("Stickers")}
           />
         </li>
       </ul>

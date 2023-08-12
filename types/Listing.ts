@@ -1,3 +1,4 @@
+import Sticker from "./Sticker";
 import { Json } from "./supabase";
 
 export default interface Listing {
@@ -13,15 +14,17 @@ export default interface Listing {
   price: number | null;
   skin_id: number;
   stat_trak: boolean | null;
+  souvenir: boolean | null;
   steam_id: string | null;
   steam_link: string | null;
-  stickers: Json[] | null;
+  stickers: Sticker[] | null;
   skinport_id: number | null;
   market_price: number | null;
   date_ingested: number | null;
 }
 
 export interface EnrichedListing extends Listing {
+  stickerTotal: number;
   skins: {
     name: string | null;
     weapon: string | null;
@@ -41,6 +44,7 @@ export interface EnrichedListing extends Listing {
 export interface ScoredListing extends EnrichedListing {
   score: {
     total: number;
+    stickerScore: number;
     priceDifference: number;
     floatRank: number;
     collectionDate: number;

@@ -13,6 +13,7 @@ export enum Sort {
   FloatDsc = "floatDsc",
   CollectionAsc = "collectionAsc",
   CollectionDsc = "collectionDsc",
+  StickerPriceDsc = "stickerDsc",
 }
 
 interface SortSelectProps {
@@ -30,6 +31,7 @@ const SortSelect: FC<SortSelectProps> = ({ sort, setSort }) => {
     { value: Sort.FloatDsc, label: "Highest Float" },
     { value: Sort.CollectionAsc, label: "Newest Collection" },
     { value: Sort.CollectionDsc, label: "Oldest Collection" },
+    { value: Sort.StickerPriceDsc, label: "Highest Sticker Price" },
   ];
 
   return (

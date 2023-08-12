@@ -10,6 +10,9 @@ import "react-loading-skeleton/dist/skeleton.css";
 import FloatRank from "@/types/FloatRank";
 import Skin from "@/types/Skin";
 import MarketPrice from "@/types/MarketPrice";
+import Image from "next/image";
+import stickerIcon from "../public/sticker.svg";
+import Sticker from "@/types/Sticker";
 
 const exteriorAbbreviation = (exterior: string) => {
   switch (exterior) {
@@ -100,9 +103,10 @@ const scoreColor = (score: number) => {
 
 interface ListingCardProps {
   listing: ScoredListing;
+  scoreFocus: "Top floats" | "Stickers";
 }
 
-const ListingCard: FC<ListingCardProps> = ({ listing }) => {
+const ListingCard: FC<ListingCardProps> = ({ listing, scoreFocus }) => {
   const [hovered, setHovered] = useState(false);
   const [floatRankings, setFloatRankings] = useState<FloatRank[]>([]);
   const [collectionSkins, setCollectionSkins] = useState<Skin[]>([]);
@@ -161,7 +165,7 @@ const ListingCard: FC<ListingCardProps> = ({ listing }) => {
   const floatRange = 100 - (maxFloatWidth - minFloatWidth);
 
   const scoreCard = ReactDOMServer.renderToStaticMarkup(
-    <div style={{ width: "220px", padding: "0.5rem" }}>
+    <div style={{ width: "250px", padding: "0.8rem" }}>
       <p style={{ fontWeight: "bold", paddingBottom: "1rem" }}>
         Rating breakdown
       </p>
@@ -284,17 +288,19 @@ const ListingCard: FC<ListingCardProps> = ({ listing }) => {
           .slice(rank - 5 <= 0 ? 0 : rank - 5, rank + 4 >= 200 ? 200 : rank + 4)
       ) : (
         <SkeletonTheme
-          baseColor="#353535"
-          highlightColor="#494949"
+          baseColor="#1d1d2f"
+          highlightColor="#23233b"
           borderRadius="10px"
           duration={2}
         >
           <Skeleton
             count={10}
-            width="220px"
+            width="100%"
             height="10px"
             inline
-            style={{ marginTop: "0.4rem" }}
+            style={{
+              marginTop: "0.4rem",
+            }}
           />
         </SkeletonTheme>
       )}
@@ -306,6 +312,8 @@ const ListingCard: FC<ListingCardProps> = ({ listing }) => {
       style={{
         width: "500px",
         paddingBottom: "1rem",
+        marginLeft: "0.5rem",
+        marginRight: "0.5rem",
       }}
     >
       <div
@@ -314,7 +322,6 @@ const ListingCard: FC<ListingCardProps> = ({ listing }) => {
           marginTop: "0.5rem",
           display: "flex",
           alignItems: "center",
-          paddingLeft: "0.6rem",
         }}
       >
         <p style={{ fontWeight: "bold" }}>{listing.skins.collections?.name}</p>
@@ -335,7 +342,7 @@ const ListingCard: FC<ListingCardProps> = ({ listing }) => {
               fontSize: "1em",
             }}
           >
-            {collectionSkins.length}
+            {collectionSkins?.length}
           </p>
         </div>
         <div style={{ flex: 1 }} />
@@ -343,7 +350,7 @@ const ListingCard: FC<ListingCardProps> = ({ listing }) => {
           {listing.skins.collections?.collection_date}
         </p>
       </div>
-      {collectionSkins.length > 0 ? (
+      {collectionSkins?.length > 0 ? (
         collectionSkins.map((skin: Skin, index) => {
           return (
             <div
@@ -356,7 +363,7 @@ const ListingCard: FC<ListingCardProps> = ({ listing }) => {
                 paddingBottom: "0.2rem",
                 paddingLeft: "0.6rem",
                 paddingRight: "0.6rem",
-                backgroundColor: index % 2 === 0 ? "#212121" : "inherit",
+                backgroundColor: index % 2 === 0 ? "#202031" : "inherit",
               }}
             >
               <p
@@ -402,17 +409,19 @@ const ListingCard: FC<ListingCardProps> = ({ listing }) => {
         })
       ) : (
         <SkeletonTheme
-          baseColor="#353535"
-          highlightColor="#494949"
+          baseColor="#1d1d2f"
+          highlightColor="#23233b"
           borderRadius="10px"
           duration={2}
         >
           <Skeleton
             count={10}
             width="100%"
-            height="10px"
+            height="12px"
             inline
-            style={{ marginTop: "0.4rem" }}
+            style={{
+              marginTop: "0.6rem",
+            }}
           />
         </SkeletonTheme>
       )}
@@ -423,6 +432,8 @@ const ListingCard: FC<ListingCardProps> = ({ listing }) => {
     <div
       style={{
         width: "250px",
+        paddingLeft: "0.5rem",
+        paddingRight: "0.5rem",
         paddingBottom: "1rem",
         paddingTop: "0.7rem",
       }}
@@ -431,7 +442,6 @@ const ListingCard: FC<ListingCardProps> = ({ listing }) => {
         style={{
           fontWeight: "bold",
           paddingBottom: "1rem",
-          paddingLeft: "0.6rem",
         }}
       >
         Market prices
@@ -490,7 +500,108 @@ const ListingCard: FC<ListingCardProps> = ({ listing }) => {
             );
           })
       ) : noPrices ? (
-        <p style={{ paddingLeft: "0.6rem", opacity: 0.4 }}>No prices found</p>
+        <p style={{ opacity: 0.4 }}>No prices found</p>
+      ) : (
+        <SkeletonTheme
+          baseColor="#1d1d2f"
+          highlightColor="#23233b"
+          borderRadius="10px"
+          duration={2}
+        >
+          <Skeleton
+            count={1}
+            width="100%"
+            height="12px"
+            inline
+            style={{
+              marginTop: "0.6rem",
+            }}
+          />
+        </SkeletonTheme>
+      )}
+    </div>
+  );
+  const stickerCard = ReactDOMServer.renderToStaticMarkup(
+    <div
+      style={{
+        minWidth: "450px",
+        paddingBottom: "1rem",
+        paddingTop: "0.7rem",
+        paddingRight: "0.7rem",
+      }}
+    >
+      <div
+        style={{ display: "flex", alignItems: "center", paddingBottom: "1rem" }}
+      >
+        <p
+          style={{
+            fontWeight: "bold",
+            paddingLeft: "0.6rem",
+            marginRight: "0.5rem",
+          }}
+        >
+          Stickers
+        </p>
+        <div
+          style={{
+            backgroundColor: "rgb(51 51 77)",
+            padding: "0.2rem",
+            borderRadius: "100px",
+            color: "white",
+          }}
+        >
+          <p
+            style={{
+              paddingLeft: "0.4rem",
+              paddingRight: "0.4rem",
+              fontWeight: "bold",
+              fontSize: "1em",
+            }}
+          >
+            {listing.stickers && listing.stickers.length}
+          </p>
+        </div>
+      </div>
+      {listing.stickers && listing.stickers?.length > 0 ? (
+        listing.stickers
+          .sort((a, b) => (a.price && b.price && a.price < b.price ? 1 : -1))
+          .map((sticker: Sticker, index) => {
+            return (
+              <div
+                key={sticker.sticker_id}
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                {sticker.image_url && (
+                  <img
+                    src={sticker.image_url}
+                    style={{ width: "80px", marginRight: "0.5rem" }}
+                  />
+                )}
+                <div style={{ display: "flex", flex: 1 }}>
+                  <div style={{ marginRight: "2rem", flex: 1 }}>
+                    <p style={{ paddingBottom: "0.5rem" }}>{sticker.name}</p>
+                    <p
+                      style={{
+                        opacity: 0.5,
+                        fontSize: "0.8em",
+                      }}
+                    >
+                      {sticker.collection_name}
+                    </p>
+                  </div>
+                  {sticker.price && (
+                    <p style={{ fontWeight: "bold", color: "#2da156" }}>
+                      ${sticker.price?.toFixed(2)}
+                    </p>
+                  )}
+                </div>
+              </div>
+            );
+          })
       ) : (
         <SkeletonTheme
           baseColor="#353535"
@@ -532,8 +643,11 @@ const ListingCard: FC<ListingCardProps> = ({ listing }) => {
             place="right"
             style={{
               zIndex: 100,
-              backgroundColor: "#1a1a1a",
+              backgroundColor: "rgb(22, 22, 35)",
+              boxShadow: "0 0 20px rgba(0, 0, 0, 0.8)",
+              borderRadius: "10px",
             }}
+            border="1px solid #6a6a93"
             opacity={1}
           />
           <Tooltip
@@ -541,8 +655,11 @@ const ListingCard: FC<ListingCardProps> = ({ listing }) => {
             place="left"
             style={{
               zIndex: 100,
-              backgroundColor: "#1a1a1a",
+              backgroundColor: "rgb(22, 22, 35)",
+              boxShadow: "0 0 20px rgba(0, 0, 0, 0.8)",
+              borderRadius: "10px",
             }}
+            border="1px solid #6a6a93"
             opacity={1}
           />
           <Tooltip
@@ -550,8 +667,11 @@ const ListingCard: FC<ListingCardProps> = ({ listing }) => {
             place="left"
             style={{
               zIndex: 100,
-              backgroundColor: "#1a1a1a",
+              backgroundColor: "rgb(22, 22, 35)",
+              boxShadow: "0 0 20px rgba(0, 0, 0, 0.8)",
+              borderRadius: "10px",
             }}
+            border="1px solid #6a6a93"
             opacity={1}
           />
           <Tooltip
@@ -559,8 +679,23 @@ const ListingCard: FC<ListingCardProps> = ({ listing }) => {
             place="right"
             style={{
               zIndex: 100,
-              backgroundColor: "#1a1a1a",
+              backgroundColor: "rgb(22, 22, 35)",
+              boxShadow: "0 0 20px rgba(0, 0, 0, 0.8)",
+              borderRadius: "10px",
             }}
+            border="1px solid #6a6a93"
+            opacity={1}
+          />
+          <Tooltip
+            id="stickers"
+            place="right"
+            style={{
+              zIndex: 100,
+              backgroundColor: "rgb(22, 22, 35)",
+              boxShadow: "0 0 20px rgba(0, 0, 0, 0.8)",
+              borderRadius: "10px",
+            }}
+            border="1px solid #6a6a93"
             opacity={1}
           />
         </>
@@ -631,34 +766,87 @@ const ListingCard: FC<ListingCardProps> = ({ listing }) => {
                 </div>
 
                 <div style={{ flex: 1 }} />
+
                 <p className={styles.suggestedPrice}>
                   ${listing.market_price && listing.market_price / 100}
                 </p>
               </div>
-              {listing.stat_trak && (
-                <p
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "flex-end",
+                  minHeight: "20px",
+                }}
+              >
+                {listing.stat_trak && (
+                  <p
+                    style={{
+                      color: "#ff7e23",
+                      fontSize: "0.8em",
+                      paddingTop: "0.3rem",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {listing.stat_trak ? "StatTrak™" : ""}
+                  </p>
+                )}
+                <div style={{ flex: 1 }} />
+                {listing.stickers && listing.stickers.length > 0 && (
+                  <div
+                    data-tooltip-id="stickers"
+                    data-tooltip-html={stickerCard}
+                    style={{ display: "flex", alignItems: "center" }}
+                  >
+                    <p
+                      style={{
+                        fontSize: "0.8em",
+                        marginRight: "0.3rem",
+                        opacity: 0.5,
+                      }}
+                    >
+                      {listing.stickers.length}
+                    </p>
+                    <Image
+                      priority
+                      src={stickerIcon}
+                      alt="Stickers"
+                      height={17}
+                      width={17}
+                      style={{ filter: "invert(100%)", opacity: 0.5 }}
+                    />
+                    <p
+                      style={{
+                        fontSize: "0.8em",
+                        marginLeft: "0.5rem",
+                        opacity: 0.5,
+                      }}
+                    >
+                      ${listing.stickerTotal}
+                    </p>
+                  </div>
+                )}
+              </div>
+              <div style={{ flex: 1 }} />
+              {listing.skins.collections?.collection_image && (
+                <div
+                  data-tooltip-id="collection"
+                  data-tooltip-html={collection}
+                  onMouseEnter={() => fetchCollection()}
                   style={{
-                    color: "#ff7e23",
-                    fontSize: "0.8em",
-                    paddingTop: "0.3rem",
-                    fontWeight: "bold",
+                    zIndex: 50,
+                    width: "55px",
+                    height: "55px",
                   }}
                 >
-                  {listing.stat_trak ? "StatTrak™" : ""}
-                </p>
+                  <img
+                    src={listing.skins.collections?.collection_image ?? ""}
+                    style={{
+                      width: "55px",
+                      marginTop: "0.2rem",
+                    }}
+                  />
+                </div>
               )}
-              <div style={{ flex: 1 }} />
-              <img
-                data-tooltip-id="collection"
-                data-tooltip-html={collection}
-                src={listing.skins.collections?.collection_image ?? ""}
-                style={{
-                  maxHeight: "55px",
-                  maxWidth: "55px",
-                  marginTop: "0.2rem",
-                }}
-                onMouseEnter={() => fetchCollection()}
-              />
               <div style={{ display: "flex", alignItems: "flex-end" }}>
                 <div
                   style={{ display: "flex", flexDirection: "column", flex: 1 }}
@@ -737,7 +925,11 @@ const ListingCard: FC<ListingCardProps> = ({ listing }) => {
                         : "white",
                     }}
                   >
-                    {Math.round(listing.score.total)}
+                    {Math.round(
+                      scoreFocus === "Top floats"
+                        ? listing.score.total
+                        : listing.score.stickerScore
+                    )}
                   </div>
                 </div>
               </div>

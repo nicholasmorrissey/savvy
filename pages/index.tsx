@@ -1,5 +1,5 @@
 import Head from "next/head";
-import React from "react";
+import React, { useState } from "react";
 import "../styles/globals.scss";
 import "../styles/waves.scss";
 import "react-loading-skeleton/dist/skeleton.css";
@@ -22,6 +22,10 @@ export default function Home() {
     collections: [],
     rarities: [],
   });
+
+  const [scoreFocus, setScoreFocus] = useState<"Top floats" | "Stickers">(
+    "Top floats"
+  );
 
   return (
     <div>
@@ -70,8 +74,16 @@ export default function Home() {
               paddingRight: "2rem",
             }}
           >
-            <MarketSidebar setFilters={setFilters} />
-            <MarketListings smallRes={smallRes} filters={filters} />
+            <MarketSidebar
+              setFilters={setFilters}
+              scoreFocus={scoreFocus}
+              setScoreFocus={setScoreFocus}
+            />
+            <MarketListings
+              smallRes={smallRes}
+              filters={filters}
+              scoreFocus={scoreFocus}
+            />
           </div>
         </div>
       </main>

@@ -12,10 +12,15 @@ import ListingFilters from "@/types/ListingFilters";
 
 interface MarketListingsProps {
   filters: ListingFilters;
+  scoreFocus: "Top floats" | "Stickers";
   smallRes?: boolean;
 }
 
-const MarketListings: FC<MarketListingsProps> = ({ smallRes, filters }) => {
+const MarketListings: FC<MarketListingsProps> = ({
+  smallRes,
+  filters,
+  scoreFocus,
+}) => {
   const [scoredListings, setScoredListings] = useState<ScoredListing[]>([]);
   const [filteredListings, setFilteredListings] = useState<ScoredListing[]>([]);
 
@@ -33,15 +38,29 @@ const MarketListings: FC<MarketListingsProps> = ({ smallRes, filters }) => {
         );
       case Sort.RatingAsc:
         return scoredListings.sort((a, b) =>
-          a.score.total && b.score.total && a.score.total > b.score.total
+          scoreFocus === "Top floats"
+            ? a.score.total && b.score.total && a.score.total > b.score.total
+              ? 1
+              : -1
+            : a.score.stickerScore &&
+              b.score.stickerScore &&
+              a.score.stickerScore > b.score.stickerScore
             ? 1
             : -1
         );
       case Sort.RatingDsc:
         return scoredListings.sort((a, b) =>
-          a.score.total && b.score.total && a.score.total > b.score.total
+          scoreFocus === "Top floats"
+            ? a.score.total && b.score.total && a.score.total > b.score.total
+              ? -1
+              : 1
+            : a.score.stickerScore > b.score.stickerScore
             ? -1
             : 1
+        );
+      case Sort.StickerPriceDsc:
+        return scoredListings.sort((a, b) =>
+          a.stickerTotal > b.stickerTotal ? -1 : 1
         );
       case Sort.FloatAsc:
         return scoredListings.sort((a, b) =>
@@ -79,6 +98,7 @@ const MarketListings: FC<MarketListingsProps> = ({ smallRes, filters }) => {
 
           return collectionADate > collectionBDate ? 1 : -1;
         });
+
       default:
         return scoredListings.sort((a, b) => (a.score > b.score ? -1 : 1));
     }
@@ -92,7 +112,10 @@ const MarketListings: FC<MarketListingsProps> = ({ smallRes, filters }) => {
 
         for (const listing of listings) {
           const score = await getListingScore(listing);
-          scoredListings.push({ ...listing, score: score });
+          scoredListings.push({
+            ...listing,
+            score: score,
+          });
         }
 
         setScoredListings(scoredListings);
@@ -101,7 +124,7 @@ const MarketListings: FC<MarketListingsProps> = ({ smallRes, filters }) => {
 
   useEffect(() => {
     setFilteredListings(filterListings());
-  }, [scoredListings, filters, sort]);
+  }, [scoredListings, filters, sort, scoreFocus]);
 
   const filterListings = () => {
     return sortedListings().filter((listing) => {
@@ -126,6 +149,11 @@ const MarketListings: FC<MarketListingsProps> = ({ smallRes, filters }) => {
         listing.skins?.quality &&
         filters.rarities.length > 0 &&
         !filters.rarities.includes(listing.skins.quality)
+      )
+        return false;
+      if (
+        (sort === Sort.StickerPriceDsc || scoreFocus === "Stickers") &&
+        (listing.stickers?.length === 0 || listing.souvenir)
       )
         return false;
 
@@ -238,7 +266,11 @@ const MarketListings: FC<MarketListingsProps> = ({ smallRes, filters }) => {
               }}
             >
               {filteredListings.slice(0, 84).map((listing) => (
-                <ListingCard listing={listing} key={listing.id} />
+                <ListingCard
+                  listing={listing}
+                  key={listing.id}
+                  scoreFocus={scoreFocus}
+                />
               ))}
             </div>
           ) : (

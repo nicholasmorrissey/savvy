@@ -116,6 +116,13 @@ export const getListingScore = async (listing: EnrichedListing) => {
   const baseMultiplier = (maxScore - minScore) / 2;
   const floatRangeScore = minScore + floatRangeMultiplier * 2 * baseMultiplier;
 
+  const stickerPriceDifference =
+    listing.price && listing.stickerTotal
+      ? Math.round((listing.stickerTotal / listing.price) * 10000)
+      : 0;
+
+  const stickersScore = stickerPriceDifference;
+
   // const floatRangeScore =
   //   -priceDifference +
   //   floatRangeMultiplier * (priceDifference - -priceDifference);
@@ -129,6 +136,7 @@ export const getListingScore = async (listing: EnrichedListing) => {
 
   return {
     total: score,
+    stickerScore: stickersScore,
     priceDifference: priceDifference,
     floatRank: floatRankScore,
     // collectionDate:

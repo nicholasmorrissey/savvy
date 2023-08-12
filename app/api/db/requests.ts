@@ -1,3 +1,4 @@
+import Listing from "@/types/Listing";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { createClient } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
@@ -12,7 +13,20 @@ export async function getAllListings() {
     )
     .is("archived_date", null);
 
-  return data;
+  const parsedData = data?.map((item: Listing) => {
+    const stickerTotal =
+      item.stickers &&
+      item.stickers
+        .reduce((sum: number, { price }) => sum + (price ?? 0), 0)
+        .toFixed(2);
+
+    return {
+      ...item,
+      stickerTotal: Number(stickerTotal),
+    };
+  });
+
+  return parsedData;
 }
 
 export async function getSkinFloatRankings(skin_id: number) {
